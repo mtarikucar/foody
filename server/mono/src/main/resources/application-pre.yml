@@ -1,0 +1,36 @@
+
+server:
+  port: 8081
+  servlet:
+    context-path: /api/menu/v1
+  undertow:
+    threads:
+      io: 16
+      worker: 256
+    buffer-size: 1024
+    direct-buffers: true
+
+
+# Veritabanı bağlantı bilgileri
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/menu
+    username: postgres
+    password: 123
+
+  # Veritabanı sürücüsü ve platformu
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+    # Hibernate otomatik tablo güncellemelerini aç
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+
+web:
+  cors:
+    allowed-origins: "http://localhost:4200"
+    allowed-methods: GET, POST, PATCH, PUT, DELETE, OPTIONS, HEAD
+    max-age: 3600
+    allowed-headers: "Requestor-Type"
+    exposed-headers: "X-Get-Header"

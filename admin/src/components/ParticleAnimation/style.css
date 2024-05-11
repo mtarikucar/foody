@@ -1,0 +1,36 @@
+.particles-background {
+    position: relative;
+    width: 100%;
+    height: 100%; /* Adjust as needed */
+    overflow: hidden;
+    backdrop-filter: blur(100px);
+    border-radius: 100%;
+}
+
+.particle {
+    position: absolute;
+    background-color: #7551ff;
+    border-radius: 50%;
+    box-shadow: 0 0 8px 3px rgba(117, 81, 255, 0.5);
+    opacity: 1;
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    50% {
+        transform: translateY(50%);
+        opacity: 0;
+    }100% {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+}
+
+.particle {
+    animation-name: float;
+    animation-timing-function: ease-in;
+    animation-iteration-count: infinite;
+}

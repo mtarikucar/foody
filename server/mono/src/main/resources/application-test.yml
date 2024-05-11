@@ -1,0 +1,26 @@
+server:
+  port: 8082
+  servlet:
+    context-path: /api/menu/v1
+  undertow:
+    threads:
+      io: 16
+      worker: 256
+    buffer-size: 1024
+    direct-buffers: true
+
+# Veritabanı bağlantı bilgileri
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/menuTest
+    username: postgres
+    password: 123
+
+  # Veritabanı sürücüsü ve platformu
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+    # Hibernate otomatik tablo güncellemelerini aç
+    hibernate:
+      ddl-auto: update
+    open-in-view: false

@@ -1,0 +1,26 @@
+
+server:
+  port: 8080
+  servlet:
+    context-path: /api/menu/v1
+  undertow:
+    threads:
+      io: 16
+      worker: 256
+    buffer-size: 1024
+    direct-buffers: true
+
+
+spring:
+  datasource:
+    url: jdbc:postgresql://34.141.28.72:5432/menu
+    username: postgres
+    password: postgres
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+
+
