@@ -9,6 +9,8 @@ import {useParams} from "react-router-dom";
 import {useQuery} from "react-query";
 import {getBranch, getCategories, getMenu} from "../../../api/axios";
 
+import { TfiViewListAlt  ,TfiViewGrid} from "react-icons/tfi";
+
 
 const Menu = ({title}: { title?: string }) => {
     const [{foodItems, menuData, categoriesData, branchData}, dispatch] =
@@ -19,6 +21,7 @@ const Menu = ({title}: { title?: string }) => {
     const [showButton, setShowButton] = useState(false);
     const [scrollValue, setScrollValue] = useState(0);
     const [filter, setFilter] = useState<string>("");
+    const [colView, setColView] = useState(true); // State to toggle column view
     const {data: branch, isLoading: isBranchLoading, isError: isBranchError, error: branchError} = useQuery(
         ["branch", id],
         () => getBranch(id),
@@ -78,14 +81,24 @@ const Menu = ({title}: { title?: string }) => {
     }
 
     return (
-        <section className="w-full my-5" id="menu">
-            <div className="w-full flex items-center justify-center">
+        <section className="w-full my-2" id="menu">
+            <div className="w-full my-3 flex items-center justify-center">
                 <Title title={title || "Our Hot Dishes"} center/>
             </div>
             <Filters filter={filter} setFilter={setFilter}/>
+            <div className="flex justify-between items-center my-2 w-full px-4">
+                <span>Ürünler</span>
+                <button
+                    className="p-2  text-gray-600  transition duration-300"
+                    onClick={() => setColView(!colView)}
+                    aria-label="Toggle View"
+                >
+                    {colView ? <TfiViewGrid size={24}/> : <TfiViewListAlt size={24}/>}
+                </button>
+            </div>
             <Container
                 className=""
-                col
+                col={colView}
                 scrollOffset={scrollValue}
                 filter={filter}
             />

@@ -9,11 +9,22 @@ import { isAdmin } from "../../utils/functions";
 import { useStateValue } from "../../context/StateProvider";
 import {useInfiniteQuery} from "react-query";
 import {getProducts} from "../../api/axios";
-import {SingleProduct} from "../FoodItem/singleProduct";
+import {SingleProduct} from "../FoodItem/SingleProduct";
 
-const Container = ({scrollOffset, col, className, filter }: {scrollOffset:number, col?: boolean; filter:string, className?:string }) => {
+
+const Container = ({
+                     scrollOffset,
+                     col,
+                     className,
+                     filter
+                   }: {
+  scrollOffset: number,
+  col?: boolean;
+  filter: string,
+  className?: string
+}) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [{ user ,menuData}] = useStateValue();
+  const [{ user, menuData }] = useStateValue();
 
   const {
     data: products,
@@ -26,13 +37,7 @@ const Container = ({scrollOffset, col, className, filter }: {scrollOffset:number
       ['products', filter, menuData?.menuId],
       ({ pageParam = 0 }) => getProducts(filter, menuData?.menuId, pageParam),
       {
-        getNextPageParam: (lastPage) => {
-          if (!lastPage.data.last) {
-            return lastPage.data.pageable.pageNumber + 1;
-          } else {
-            return undefined;
-          }
-        }
+        getNextPageParam: (lastPage) => lastPage.data.last ? undefined : lastPage.data.pageable.pageNumber + 1
       }
   );
 
@@ -43,18 +48,13 @@ const Container = ({scrollOffset, col, className, filter }: {scrollOffset:number
   }, [scrollOffset]);
 
   useLayoutEffect(() => {
-    const observerCallback = (entries: IntersectionObserverEntry[]) => { // entries tipi tanımlandı
-      if (entries[0].isIntersecting) {
-        fetchNextPage();
-      }
-    };
-    const options = {
-      root: null,
-      rootMargin: '0px',
-      threshold: 1.0
-    };
+    const observer = new IntersectionObserver(
+        (entries) => {
+          if (entries[0].isIntersecting) fetchNextPage();
+        },
+        { root: null, rootMargin: '0px', threshold: 1.0 }
+    );
 
-    const observer = new IntersectionObserver(observerCallback, options);
     if (containerRef.current) {
       observer.observe(containerRef.current);
     }
@@ -62,19 +62,20 @@ const Container = ({scrollOffset, col, className, filter }: {scrollOffset:number
     return () => observer.disconnect();
   }, [fetchNextPage]);
 
-  if (isLoading) return <Loader progress={"Fetching Food Items..."} />;
-  if (isError) return <NotFound text={`Error: `} />;
+  if (isLoading) return <Loader progress="Fetching Food Items..." />;
+  if (isError) return <NotFound text={`Error:    || "Unknown error"}`} />;
 
-
-
+  // Adjust the grid and overflow styles based on the `col` prop
+  const gridClass = col ? "grid-cols-1" : "grid-cols-2";
+  const overflowClass = col ? "overflow-x-hidden" : "overflow-x-scroll scrollbar-hidden scroll-smooth";
 
   return (
       <motion.div
           ref={containerRef}
-          initial={{opacity: 0, x: 200}}
-          animate={{opacity: 1, x: 0}}
-          exit={{opacity: 0, x: 200}}
-          className={`${className} w-full flex items-center ${(!products || col) && "justify-center"} min-h-[200px] gap-4 px-2 ${!col ? "overflow-x-scroll scrollbar-hidden scroll-smooth" : "overflow-x-hidden flex-wrap"}`}
+          initial={{ opacity: 0, x: 200 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: 200 }}
+          className={`mx-auto grid ${gridClass}  gap-y-4 gap-x-4 mb-5 w-full ${className} flex-wrap min-h-[200px] gap-4 px-2 ${overflowClass}`}
       >
         {products && products.pages.map(group =>
             group.data.content.map((item:Product) => (

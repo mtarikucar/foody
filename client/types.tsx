@@ -35,6 +35,11 @@ export type Product = {
     featureIds?: string[]; // Opsiyonel olarak eklendi, UUID tipindeki bir Set
 };
 
+export type Feature = {
+    featureName: string; // UUID için string tipi kullanılır
+    featureId:string
+};
+
 
 export type Products = {
     items: Product[];
