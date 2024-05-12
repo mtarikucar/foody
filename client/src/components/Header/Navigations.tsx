@@ -4,7 +4,7 @@ import { MdShoppingBasket } from "react-icons/md";
 import { motion } from "framer-motion";
 import { useStateValue } from "../../context/StateProvider";
 
-const Navigations = ({ direction }: { direction?: string }) => {
+const Navigations = ({ direction ,branchId}: { direction?: string ,branchId?:string}) => {
   const [{ showContactForm, cartItems }, dispatch] = useStateValue();
   const handleToggleCart = () => {
     dispatch({
@@ -26,19 +26,19 @@ const Navigations = ({ direction }: { direction?: string }) => {
         exit={{ opacity: 0, x: 200 }}
         className={`flex items-center gap-8 ${direction && direction}`}
       >
+        {/*<motion.li
+          whileHover={{ scale: 1.1 }}
+          className="md:text-sm lg:text-md text-base text-textColor cursor-pointer hover:text-headingColor duration-100 transition-all ease-in-out"
+        >
+          <Link to={`/${branchId}/home`}>Home</Link>
+        </motion.li>*/}
         <motion.li
           whileHover={{ scale: 1.1 }}
           className="md:text-sm lg:text-md text-base text-textColor cursor-pointer hover:text-headingColor duration-100 transition-all ease-in-out"
         >
-          <Link to={'/'}>Home</Link>
+          <Link to={`/${branchId}`}>Menü</Link>
         </motion.li>
-        <motion.li
-          whileHover={{ scale: 1.1 }}
-          className="md:text-sm lg:text-md text-base text-textColor cursor-pointer hover:text-headingColor duration-100 transition-all ease-in-out"
-        >
-          <Link to={'/menu'}>Menu</Link>
-        </motion.li>
-        <motion.li
+        {/*<motion.li
           whileHover={{ scale: 1.1 }}
           className="md:text-sm lg:text-md text-base text-textColor cursor-pointer hover:text-headingColor duration-100 transition-all ease-in-out"
         >
@@ -49,17 +49,17 @@ const Navigations = ({ direction }: { direction?: string }) => {
           className="md:text-sm lg:text-md text-base text-textColor cursor-pointer hover:text-headingColor duration-100 transition-all ease-in-out"
         >
           <Link to={'/about'}>About us</Link>
-        </motion.li>
+        </motion.li>*/}
         <motion.li
           whileHover={{ scale: 1.1 }}
           className="md:text-sm lg:text-md text-base text-textColor cursor-pointer hover:text-headingColor duration-100 transition-all ease-in-out"
           onClick={handleToggleContact}
         >
-          Contact us
+          Bize Ulaşın
         </motion.li>
       </motion.ul>
 
-      <motion.div
+      {/*<motion.div
         whileTap={{ scale: 0.9 }}
         whileHover={{ scale: 1.1 }}
         className="relative flex items-center justify-center text-textColor"
@@ -73,7 +73,7 @@ const Navigations = ({ direction }: { direction?: string }) => {
             </p>
           </div>
         )}
-      </motion.div>
+      </motion.div>*/}
     </div>
   );
 };

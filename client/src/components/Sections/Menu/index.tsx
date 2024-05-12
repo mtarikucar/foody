@@ -1,31 +1,96 @@
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 
 import Container from "../../Container";
-import { FilterFood } from "../../../utils/filters";
+import {FilterFood} from "../../../utils/filters";
 import Filters from "../../Filters";
-import { Title } from "..";
-import { useStateValue } from "../../../context/StateProvider";
+import {Title} from "..";
+import {useStateValue} from "../../../context/StateProvider";
+import {useParams} from "react-router-dom";
+import {useQuery} from "react-query";
+import {getBranch, getCategories, getMenu} from "../../../api/axios";
 
-const Menu = ({title}:{title?:string}) => {
 
-  const [scrollValue, setScrollValue] = useState(0);
-  const [{ foodItems }, dispatch] = useStateValue();
-  const [filter, setFilter] = useState<string>("all");
-    
-  return (
-    <section className="w-full my-5" id="menu">
-      <div className="w-full flex items-center justify-center">
-        <Title title={title || "Our Hot Dishes"} center />
-      </div>
-      <Filters filter={filter} setFilter = {setFilter} />
-      <Container
-        className="bg-containerbg"
-        col
-        scrollOffset={scrollValue}
-        items={filter === "all" ? foodItems : FilterFood(filter)}
-      />
-    </section>
-  );
+const Menu = ({title}: { title?: string }) => {
+    const [{foodItems, menuData, categoriesData, branchData}, dispatch] =
+        useStateValue();
+    const {id} = useParams();
+    console.log(id)
+    const [menuId, setMenuId] = useState(null);
+    const [showButton, setShowButton] = useState(false);
+    const [scrollValue, setScrollValue] = useState(0);
+    const [filter, setFilter] = useState<string>("");
+    const {data: branch, isLoading: isBranchLoading, isError: isBranchError, error: branchError} = useQuery(
+        ["branch", id],
+        () => getBranch(id),
+        {
+            onSuccess: (branch) => {
+                dispatch({
+                    type: "SET_BRANCH",
+                    branchData: branch.data,
+                });
+                setMenuId(branch.data.menuId);
+                document.title = branch?.data?.branchName;
+                //console.log(branch.data)
+            },
+            enabled: !!id,
+        }
+    );
+
+    const {data: menu, isLoading: isMenuLoading, isError: isMenuError, error: menuError} = useQuery(
+        ["menu", menuId],
+        () => getMenu(menuId),
+        {
+            onSuccess: (menu) => {
+                dispatch({
+                    type: "SET_MENU",
+                    menuData: menu.data,
+                });
+                // console.log(menu.data)
+                /*          document.getElementById('dynamic-favicon').href = menu?.data?.logo;
+                          document.documentElement.style.setProperty('--dynamic-color', menu?.data?.color);*/
+            },
+
+            enabled: !!menuId,
+        }
+    );
+
+    const {data: categories, isLoading: isCategoryLoading, isError: isCategoryError, error: categoryError} = useQuery(
+        ["category", menuId],
+        () => getCategories(menuId),
+        {
+            onSuccess: (categories) => {
+                dispatch({
+                    type: "SET_CATEGORIES",
+                    categoriesData: categories.data,
+                });
+                //console.log(categories.data)
+            },
+            enabled: !!menuId,
+        }
+    );
+
+    if (isBranchLoading || isMenuLoading || isCategoryLoading) {
+        return <h1>yükleniyor </h1>; // Yükleme ekranını göster
+    }
+
+    if (isBranchError || isMenuError || isCategoryError) {
+        return <h1>hata </h1>; // Hata ekranını göster
+    }
+
+    return (
+        <section className="w-full my-5" id="menu">
+            <div className="w-full flex items-center justify-center">
+                <Title title={title || "Our Hot Dishes"} center/>
+            </div>
+            <Filters filter={filter} setFilter={setFilter}/>
+            <Container
+                className=""
+                col
+                scrollOffset={scrollValue}
+                filter={filter}
+            />
+        </section>
+    );
 };
 
 export default Menu;

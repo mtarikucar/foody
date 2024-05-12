@@ -8,7 +8,7 @@ const Admin = () => {
   const [{user}] = useStateValue()
   return (
      <>
-     {isAdmin(user) ? <Dashboard /> : <Home />}
+     <Dashboard />
      </>
   );
 };

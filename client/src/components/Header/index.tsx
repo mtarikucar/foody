@@ -13,7 +13,7 @@ import { useStateValue } from "../../context/StateProvider";
 const Header = () => {
   // 
   // const firebaseAuth = getAuth(app);
-  const [{ user }, dispatch] = useStateValue();
+  const [{ user,branchData,menuData }, dispatch] = useStateValue();
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenMobileNav, setIsOpenMobileNav] = useState(false);
 
@@ -22,20 +22,20 @@ const Header = () => {
     <header className="w-screen fixed z-50 bg-cardOverlay backdrop-blur-md md:p-3 md:px-4 lg:p-6 lg:px-16">
       {/* Tablet and Desktop */}
       <div className="hidden md:flex w-full justify-between itesm-center">
-        <Link to={"/"}>
+        <Link to={"/"+branchData?.branchId}>
           <motion.div
             whileHover={{ scale: 1.1 }}
             className="flex items-center gap-2 cursor-pointer"
           >
-            <img src={Logo} alt="Logo" className="md:w-6 lg:w-8 object-cover" />
+            <img src={menuData?.logo} alt="Logo" className="md:w-6 lg:w-8 object-cover rounded-full" />
             <p className="text-headingColor md:text-lg lg:text-xl font-bold">
-              Bentilzone
+                {branchData?.branchName}
             </p>
           </motion.div>
         </Link>
 
         {/* navigation */}
-        <Navigations />
+        <Navigations branchId={branchData?.branchId}/>
 
         {/* User */}
 
@@ -79,14 +79,14 @@ const Header = () => {
             >
               <HiOutlineMenuAlt2 className="text-headingColor text-4xl" />
             </motion.div>
-            <Link to={"/"}>
+            <Link to={`/${branchData?.branchId}`}>
               <motion.div
                 whileHover={{ scale: 1.1 }}
                 className="flex items-center gap-2 cursor-pointer"
               >
-                <img src={Logo} alt="Logo" className="w-8 object-cover" />
+                <img src={menuData?.logo} alt="Logo" className="w-8 object-cover" />
                 <p className="text-headingColor text-xl font-bold">
-                  Bentilzone
+                    {branchData?.branchName}
                 </p>
               </motion.div>
             </Link>

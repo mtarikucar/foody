@@ -11,7 +11,7 @@ import {
   Signup,
 } from "./Pages";
 import { Cart, Footer, Header } from "./components";
-import { Route, Routes } from "react-router-dom";
+import {Route, Routes, useParams} from "react-router-dom";
 import {
   calculateCartTotal,
   dispatchUsers,
@@ -23,31 +23,19 @@ import {
 import { AnimatePresence } from "framer-motion";
 import Contact from "./components/Contact";
 import { ToastContainer } from "react-toastify";
-import { useEffect } from "react";
 import { useStateValue } from "./context/StateProvider";
 
 function App() {
-  const [{ showCart,showContactForm, user, foodItems, cartItems, adminMode }, dispatch] =
+  const [{ showCart,showContactForm, user, foodItems, cartItems, adminMode,menuData }, dispatch] =
     useStateValue();
 
-  useEffect(() => {
-    fetchFoodData(dispatch);
-    dispatchUsers(dispatch);
-    user && fetchUserCartData(user, dispatch);
-  }, []);
-
-  useEffect(() => {
-    foodItems &&
-      cartItems.length > 0 &&
-      calculateCartTotal(cartItems, foodItems, dispatch);
-  }, [cartItems, foodItems, dispatch]);
   return (
     <AnimatePresence exitBeforeEnter>
       <ToastContainer />
       <div className="w-screen h-auto min-h-[100vh] flex flex-col bg-primary">
         {showCart && <Cart />}
         {showContactForm && <Contact />}
-        {!(adminMode && isAdmin(user)) && <Header />}
+        {menuData && <Header />}
         <main
           className={`${
             !(adminMode && isAdmin(user)) &&
@@ -57,17 +45,16 @@ function App() {
         >
           {/* Routes */}
           <Routes>
-            <Route path="/*" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Signup />} />
-            <Route path="/admin" element={<Admin />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/menu" element={<Menu />} />
-            <Route path="/services" element={<Services />} />
+            <Route path="/:id/home" element={<Home />} />
+           {/* <Route path="/login" element={<Login />} />*/}
+            {/*<Route path="/register" element={<Signup />} />*/}
+            {/*<Route path="/admin" element={<Admin />} />*/}
+            {/*<Route path="/profile" element={<Profile />} />*/}
+            <Route path="/:id/about" element={<About />} />
+            <Route path="/:id" element={<Menu />} />
+           {/* <Route path="/services" element={<Services />} />*/}
           </Routes>
-
-          {!(adminMode && isAdmin(user)) && <Footer />}
+          {menuData &&<Footer/>}
         </main>
       </div>
     </AnimatePresence>

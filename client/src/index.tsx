@@ -7,14 +7,19 @@ import {BrowserRouter as Router} from 'react-router-dom';
 import { StateProvider } from './context/StateProvider';
 import { initialState } from './context/initialState';
 import reducer from './context/reducer';
+import {QueryClient, QueryClientProvider} from "react-query";
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
+
+const queryClient = new QueryClient();
 root.render(
   <React.StrictMode>
     <Router>
       <StateProvider  initialState={initialState} reducer = {reducer}>
-      <App />
+          <QueryClientProvider client={queryClient}>
+              <App/>
+          </QueryClientProvider>
       </StateProvider>
     </Router>
   </React.StrictMode>

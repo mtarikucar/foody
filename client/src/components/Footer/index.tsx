@@ -11,21 +11,24 @@ import { Link } from "react-router-dom";
 import { Logo } from "../Assets";
 import React from "react";
 import { motion } from "framer-motion";
+import {useStateValue} from "../../context/StateProvider";
 
 const Footer = () => {
+  const [{ branchData,menuData }, dispatch] = useStateValue();
+
   return (
     <footer className="p-4 bg-primary sm:p-6 w-full">
       <div className="flex justify-center md:justify-start items-center">
         <motion.div  whileHover={{ rotate: [0, -10, 10, -10, 0] }} className="mb-3 md:mb-0">
-          <Link to="/" className="flex gap-8 items-center">
+          <Link to={"/"+branchData?.branchId} className="flex gap-8 items-center">
             <motion.img
               whileHover={{ rotate: [0, -10, 10, -10, 0] }}
-              src={Logo}
+              src={menuData?.logo}
               className="w-10 md:w-36 object-contain"
               alt="Logo"
             />
             <span className="self-center text-2xl font-semibold whitespace-nowrap text-headingColor">
-              Bentilzone
+              {branchData?.branchName}
             </span>
           </Link>
         </motion.div>
@@ -37,14 +40,14 @@ const Footer = () => {
             {
               new Date().getFullYear()
             }    
-           {" "}Bentilzone™. All Rights Reserved.
+           {" "}{branchData?.branchName}™. her hakkı saklıdır
         </span>
         <div className="flex mt-4 space-x-6 sm:justify-center sm:mt-0 md:text-xl">
           <motion.a
             whileTap={{ scale: 1.1 }}
             target={"_blank"}
             rel="noreferrer"
-            href="https://qbentil.me"
+            href=""
             className="text-textColor h-10 w-10 bg-primary rounded-full flex items-center justify-center"
           >
             <BsDribbble />
@@ -53,7 +56,7 @@ const Footer = () => {
             whileTap={{ scale: 1.1 }}
             target={"_blank"}
             rel="noreferrer"
-            href="https://github.com/qbentil"
+            href=""
             className="text-textColor h-10 w-10 bg-primary rounded-full flex items-center justify-center"
           >
             <BsGithub />
@@ -62,7 +65,7 @@ const Footer = () => {
             whileTap={{ scale: 1.1 }}
             target={"_blank"}
             rel="noreferrer"
-            href="https://linkedin.com/in/bentil"
+            href=""
             className="text-textColor h-10 w-10 bg-primary rounded-full flex items-center justify-center"
           >
             <BsLinkedin />
@@ -71,7 +74,7 @@ const Footer = () => {
             whileTap={{ scale: 1.1 }}
             target={"_blank"}
             rel="noreferrer"
-            href="https://twitter.com/themanbentil"
+            href=""
             className="text-textColor h-10 w-10 bg-primary rounded-full flex items-center justify-center"
           >
             <BsTwitter />
@@ -80,7 +83,7 @@ const Footer = () => {
             whileTap={{ scale: 1.1 }}
             target={"_blank"}
             rel="noreferrer"
-            href="https://instagram.com/qbentil"
+            href=""
             className="text-textColor h-10 w-10 bg-primary rounded-full flex items-center justify-center"
           >
             <BsInstagram />
@@ -89,7 +92,7 @@ const Footer = () => {
             whileTap={{ scale: 1.1 }}
             target={"_blank"}
             rel="noreferrer"
-            href="https://facebook.com/qbentil"
+            href=""
             className="text-textColor h-10 w-10 bg-primary rounded-full flex items-center justify-center"
           >
             <BsFacebook />

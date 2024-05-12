@@ -1,6 +1,9 @@
 export const actionTypes = {
     SET_USER: 'SET_USER',
     SET_FOOD_ITEMS: 'SET_FOOD_ITEMS',
+    SET_CATEGORIES: 'SET_CATEGORIES',
+    SET_BRANCH: 'SET_BRANCH',
+    SET_MENU: 'SET_MENU',
     TOGGLE_CART: 'TOGGLE_CART',
     SET_CARTITEMS: 'SET_CARTITEMS',
     SET_CART_TOTAL: 'SET_CART_TOTAL',
@@ -24,6 +27,21 @@ const reducer = (state, action) => {
             return {
                 ...state,
                 foodItems: action.foodItems,
+            };
+        case actionTypes.SET_BRANCH:
+            return {
+                ...state,
+                branchData: action.branchData,
+            };
+        case actionTypes.SET_MENU:
+            return {
+                ...state,
+                menuData: action.menuData,
+            };
+        case actionTypes.SET_CATEGORIES:
+            return {
+                ...state,
+                categoriesData: action.categoriesData,
             };
         case actionTypes.TOGGLE_CART:
             return {

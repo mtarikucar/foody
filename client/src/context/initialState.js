@@ -13,4 +13,8 @@ export const initialState = {
     users: [],
     paymentMethod: 'mobile_money',
     checkoutData: {},
+    branchData:null,
+    menuData:null,
+    categoriesData:null
+
 }
