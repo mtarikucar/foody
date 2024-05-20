@@ -28,7 +28,6 @@ const SelectBranch = () => {
         <div className="flex justify-center items-center min-h-screen px-2">
             <div className="col-span-1 h-fit w-full xl:col-span-1 2xl:col-span-2">
 
-                <AddBranchBanner/>
                {/* <Banner open={error}/>*/}
                 {isLoading && <div className={"flex justify-center items-center m-24"}>
                     <Spinner/>
@@ -56,6 +55,7 @@ const SelectBranch = () => {
                         ))
                     }
                 </div>
+                <AddBranchBanner/>
 
 
             </div>

@@ -25,7 +25,6 @@ const Branches = () => {
   return (
     <div className="grid h-full grid-cols-1 gap-5">
       <div className="col-span-1 h-fit w-full xl:col-span-1 2xl:col-span-2">
-        <AddBranchBanner />
         <div className="z-20 grid grid-cols-2 gap-5 md:grid-cols-4 mt-4">
           {
             branches &&
@@ -41,6 +40,8 @@ const Branches = () => {
             ))
           }
         </div>
+        <AddBranchBanner />
+
       </div>
     </div>
   );
