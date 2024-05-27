@@ -126,7 +126,7 @@ const OrderTable = () => {
 
                 <div className={"overflow-y-scroll"}>
                     {addedProducts.length > 0 &&
-                        <Temporary addedProducts={addedProducts} setAddedProducts={setAddedProducts} socket={socket}/>
+                        <Temporary addedProducts={addedProducts} setAddedProducts={setAddedProducts} />
                     }
                 </div>
                 <Addition orders={orders} isOrderLoading={isOrderLoading}/>
@@ -180,12 +180,13 @@ const OrderTable = () => {
                     {products?.map(product =>
 
                         <div
+                            key={product.productId}
                             className="relative w-48 sm:w-64 p-4 m-auto bg-white shadow-lg rounded-2xl dark:bg-gray-900 cursor-pointer hover:bg-opacity-50"
                             onClick={() => setAddedProducts([...addedProducts, product])}>
 
                             <div className="w-full h-full text-center">
                                 <div className="flex flex-col justify-between h-full">
-                                    <img src={product.images[0]} alt="product" className={"rounded drop-shadow"}/>
+                                   {/* <img src={product.images[0]} alt="product" className={"rounded drop-shadow"}/>*/}
                                     <p className="absolute text-sm italic text-gray-800 dark:text-white top-2 right-2">
                                         {product.category}
                                     </p>

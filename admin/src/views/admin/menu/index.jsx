@@ -103,13 +103,16 @@ const Menu = () => {
                 </div>*/}
 
 
-                <div className={"w-full border-b-2 border-gray-300 col-span-12" }/>
+                <div className={"w-full border-b-2 border-gray-300 col-span-12"}/>
                 <div className={"my-3 flex justify-center items-center col-span-12"}>
 
                     <h2 className={"font-bold text-2xl"}>ÜRÜNLER</h2>
                 </div>
-                <div className={'col-span-12'}>
+                <div className={'col-span-12 '}>
+                        <ProductList axiosPrivate={axiosPrivate} menuId={id}/>
+                    <div className={"col-span-12 xl:col-span-6"}>
 
+                    </div>
                     <Card extra={`flex flex-col w-full h-fit !p-4 3xl:p-![18px] bg-white overflow`}
                           onClick={toggleProductModal}>
                         <div
@@ -127,7 +130,6 @@ const Menu = () => {
                             </div>
                         </div>
                     </Card>
-                    <ProductList axiosPrivate={axiosPrivate} menuId={id}/>
                 </div>
 
 

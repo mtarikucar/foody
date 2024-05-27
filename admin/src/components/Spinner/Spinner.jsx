@@ -18,7 +18,7 @@ function Spinner({loading, size = 20}) {
                 size={20}
                 aria-label="Loading Spinner"
                 data-testid="loader"
-                FadeLoader={2}
+
             />
     );
 }

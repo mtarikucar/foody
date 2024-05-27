@@ -35,22 +35,31 @@ const PricingModal = ({packageModal, onClose}) => {
 
     return (<><Modal isOpen={packageModal} onClose={onClose} size={"extraLarge"}
                      title={"ucretlendirme"} description={"denem surumu, aylik ve yillik ucretlendirme"}>
-        <PricingToggle isAnnual={isAnnual} setIsAnnual={setIsAnnual}/>
-        <AnimatePresence>
-            <div className="grid md:grid-cols-3 -mx-4">
-                {plans?.map((plan, index) => (<div key={index} className="w-full px-4 mb-6">
+        {/*<PricingToggle isAnnual={isAnnual} setIsAnnual={setIsAnnual}/>*/}
+        {
+            (plans?.length == 0 || plans == null) ?
+                <div className={"font-semibold flex justify-center items-center"}>
+                    sabit ücretlendirme paketler henüz eklenmemiştir detaylı bilgi ve fiyat için ilteişm kısında bize
+                    ulaşabilrisiniz teşekkürler
+                </div>
+                :
+                <AnimatePresence>
+                    <div className="grid md:grid-cols-3 -mx-4">
+                        {plans?.map((plan, index) => (<div key={index} className="w-full px-4 mb-6">
 
-                    <motion.div
-                        initial={{opacity: 0, y: 20}}
-                        animate={{opacity: 1, y: 0}}
-                        exit={{opacity: 0, y: -20}}
-                        transition={{duration: 0.2}}
-                    >
-                        <PricingCard {...plan} />
-                    </motion.div>
-                </div>))}
-            </div>
-        </AnimatePresence>
+                            <motion.div
+                                initial={{opacity: 0, y: 20}}
+                                animate={{opacity: 1, y: 0}}
+                                exit={{opacity: 0, y: -20}}
+                                transition={{duration: 0.2}}
+                            >
+                                <PricingCard {...plan} />
+                            </motion.div>
+                        </div>))}
+                    </div>
+
+                </AnimatePresence>
+        }
     </Modal></>);
 };
 

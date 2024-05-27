@@ -17,9 +17,6 @@ export const WebSocketProvider = ({ children }) => {
                 setWebSocket(stompClient);
 
 
-                setInterval(() => {
-                    stompClient.send("/app/ping", {});
-                }, 5000);
             };
 
             const errorCallback = (error) => {

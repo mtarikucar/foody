@@ -2,9 +2,11 @@ import React, {useState} from 'react';
 import Switch from "../../../../components/switch";
 import useAuth from "../../../../hooks/useAuth";
 import {useParams} from "react-router-dom";
+import {useWebSocket} from "../../../../context/socket/WebSocketContext";
 
-const Temporary = ({addedProducts, setAddedProducts, socket}) => {
+const Temporary = ({addedProducts, setAddedProducts}) => {
 
+    const socket = useWebSocket()
     const auth = useAuth();
     const {id} = useParams();
     const [isTotal, setIsTotal] = useState(true);

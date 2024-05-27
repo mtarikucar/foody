@@ -4,7 +4,7 @@ import React, {useEffect} from "react";
 import {AiOutlineCheckCircle, AiOutlineCloseCircle} from "react-icons/ai";
 import {NavLink} from "react-router-dom";
 
-const Upload = ({branch, isRender}) => {
+const   Requirements = ({branch, isRender}) => {
 
     console.log(branch)
     const renderWarnings = () => {
@@ -17,7 +17,7 @@ const Upload = ({branch, isRender}) => {
         };
 
         return (
-            <div>
+            <Card extra={"w-full h-full p-3"}>
                 {Object.keys(branchDetails).map(key => (
                     <div key={key} className="flex items-center gap-2 mt-2">
                         {branch[key] === null ?
@@ -36,7 +36,7 @@ const Upload = ({branch, isRender}) => {
                         }
                     </div>
                 ))}
-            </div>
+            </Card>
         );
     };
 
@@ -72,4 +72,4 @@ const Upload = ({branch, isRender}) => {
     );
 };
 
-export default Upload;
+export default Requirements;
