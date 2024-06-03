@@ -58,13 +58,13 @@ export default function Admin(props) {
 
 
     document.documentElement.dir = "ltr";
-    return (<div className="flex h-full w-full">
+    return (<div className="flex h-dvhw-full bg-white/10 dark:!bg-navy-900">
         <ScrollToTop/>
         <Joyride steps={steps} continuous={true}
                  locale={{back: 'Geri', close: 'Kapat', last: 'Bitir', next: 'Sonraki', open: 'Başlat', skip: 'Geç'}}/>
         <Sidebar open={open} onClose={() => setOpen(false)}/>
         {/* Navbar & Main Content */}
-        <div className="h-full w-full bg-lightPrimary dark:!bg-navy-900 ">
+        <div className="h-full w-full  ">
             <main className={`mx-[12px] h-full flex-none transition-all md:pr-2 `}>
                 <div className="h-full">
 

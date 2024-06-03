@@ -25,7 +25,7 @@ const Menu = () => {
     };
 
 
-    const fetchMenuData = async ({id}) => {
+    const fetchMenuData = async () => {
         try {
             const response = await axiosPrivate.get(`/menu/${id}`);
             return response.data.data;
@@ -56,11 +56,11 @@ const Menu = () => {
     };
 
 
-    const {data: menu, isLoading: isLoadingMenu, error: errorMenu} = useQuery(
-        ['menuData', {id: id}],
-        () => fetchMenuData({id: id}), {
+    const { data: menu, isLoading: isLoadingMenu, error: errorMenu } = useQuery(
+        ["menuData", id],
+        fetchMenuData, {
             onSuccess: (data) => {
-                setColor(data.color)
+                setColor(data.color);
             }
         }
     );
@@ -73,7 +73,6 @@ const Menu = () => {
                     {menu && <CustomCard
                         title={menu.menuName}
                         author={id}
-                        price={id}
                     >
                         <>
                             <ColorPickerComponent
@@ -93,27 +92,13 @@ const Menu = () => {
                     </CustomCard>
                     }
                 </div>
-                <div className="col-span-12 lg:col-span-8 lg:mb-0 ">
+                <div className="col-span-12 lg:col-span-6 lg:mb-0 ">
                     {menu &&
                         <BannerController menu={menu}/>
                     }
                 </div>
-                {/*<div className="col-span-5 lg:col-span-12 lg:mb-0 3xl:!col-span-3">
-                    <Settings/>
-                </div>*/}
-
-
-                <div className={"w-full border-b-2 border-gray-300 col-span-12"}/>
-                <div className={"my-3 flex justify-center items-center col-span-12"}>
-
-                    <h2 className={"font-bold text-2xl"}>ÜRÜNLER</h2>
-                </div>
-                <div className={'col-span-12 '}>
-                        <ProductList axiosPrivate={axiosPrivate} menuId={id}/>
-                    <div className={"col-span-12 xl:col-span-6"}>
-
-                    </div>
-                    <Card extra={`flex flex-col w-full h-fit !p-4 3xl:p-![18px] bg-white overflow`}
+                <div className="col-span-12 lg:col-span-2 w-full h-full  lg:mb-0 ">
+                    <Card extra={`flex flex-col w-full h-full justify-center   !p-4 3xl:p-![18px] bg-white overflow`}
                           onClick={toggleProductModal}>
                         <div
                             className=" w-full flex flex-col items-center justify-center hover:cursor-pointer">
@@ -130,6 +115,19 @@ const Menu = () => {
                             </div>
                         </div>
                     </Card>
+                </div>
+                {/*<div className="col-span-5 lg:col-span-12 lg:mb-0 3xl:!col-span-3">
+                    <Settings/>
+                </div>*/}
+
+
+                <div className={"w-full border-b-2 border-gray-300 col-span-12"}/>
+                <div className={"my-3 flex justify-center items-center col-span-12"}>
+
+                    <h2 className={"font-bold text-2xl"}>Menü Ürünleri</h2>
+                </div>
+                <div className={'col-span-12 '}>
+                    <ProductList axiosPrivate={axiosPrivate} menuId={id}/>
                 </div>
 
 

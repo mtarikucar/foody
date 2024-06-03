@@ -12,7 +12,7 @@ import uploadFileToFirebase from "../../../firebase/uploadFileToFirebase";
 
 
 
-function DeleteProductFromMenu({ isOpen, onClose, id ,menuId}) {
+function DeleteProductFromMenu({ isOpen, onClose, close,id ,menuId}) {
     const axiosPrivate = useAxiosPrivate();
     const auth = useAuth();
     const queryClient = useQueryClient();
@@ -25,6 +25,7 @@ function DeleteProductFromMenu({ isOpen, onClose, id ,menuId}) {
                 toast("Ürün başarıyla silindi.");
                 queryClient.invalidateQueries('products');
                 onClose();
+                close()
             },
             onError: (error) => {
                 toast.error(`Ürün silinirken bir hata oluştu: ${error.message}`);

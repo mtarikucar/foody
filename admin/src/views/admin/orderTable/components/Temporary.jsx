@@ -110,7 +110,7 @@ const Temporary = ({addedProducts, setAddedProducts}) => {
 
     return (<>
 
-            <div className={"bg-white rounded drop-shadow-lg p-2.5"}>
+            <div className={"bg-white rounded drop-shadow-lg "}>
                 <div
                     className={"flex justify-between items-center  p-2 drop-shadow-lg"}>
                     <span className={"flex justify-center items-center"}>

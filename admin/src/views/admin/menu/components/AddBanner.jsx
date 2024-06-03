@@ -19,7 +19,7 @@ function AddBanner({ isOpen, onClose, banners }) {
         banners: banners ? [...banners, data] : [data]
     }), {
         onSuccess: (data) => {
-            queryClient.invalidateQueries("menuData")
+            queryClient.invalidateQueries(["menuData", id]);
             toast("Banner başarıyla eklendi");
             onClose();
         },

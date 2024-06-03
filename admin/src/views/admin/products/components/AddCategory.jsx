@@ -67,7 +67,7 @@ const AddCategory = () => {
                         <PhotoUpload size={32} multiImage={false} onFileDataChange={(file) => {
                             setFileData(file)
                         }}/>
-                        <Field name="name" placeholder="Name" className='w-full p-2 border rounded-md'/>
+                        <Field name="name" placeholder="Kategori İsimi" className='w-full p-2 border rounded-md'/>
                         {errors.name && touched.name ? (<div>{errors.name}</div>) : null}
 
                         <button type="submit"

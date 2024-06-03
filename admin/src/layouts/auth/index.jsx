@@ -18,7 +18,7 @@ export default function Auth() {
   document.documentElement.dir = "ltr";
   return (
     <div>
-      <div className="  h-full min-h-screen w-full !bg-white dark:!bg-navy-900">
+      <div className="  h-dvh min-h-screen w-full !bg-white dark:!bg-navy-900">
         <FixedPlugin />
         <main className={`mx-auto min-h-screen`}>
           <div className=" flex min-h-screen">

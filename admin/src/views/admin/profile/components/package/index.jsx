@@ -61,13 +61,13 @@ const Package = () => {
                         className="mt-2 flex items-center justify-center rounded-full bg-lightPrimary p-[26px] text-5xl font-bold text-brand-500 dark:!bg-navy-700 dark:text-white">
                         {packageData?.packageId ? <BsEmojiLaughing /> : <BsEmojiExpressionless />}
                     </div>
-                    <h4 className="mb-px mt-3 text-2xl font-bold text-navy-700 dark:text-white">
+                    <h4 className="mb-px mt-3 text-md font-bold text-navy-700 dark:text-white">
                         {packageData?.packageId ? `Your Plan: ${packageData.packageId}` :
                             <div className={"flex flex-col justify-center items-center gap-2"}>
-                                Select a plan
+                               Bir plan seçin
                                 <div onClick={() => setPackageModal(true)}
-                                     className={"rounded-md p-2 hover:bg-indigo-500 hover:-translate-y-2 hover:text-white ease-in-out duration-300 cursor-pointer"}>
-                                    paket satin al
+                                     className={"rounded-md p-2  hover:bg-indigo-700 bg-indigo-500 hover:-translate-y-2 text-white ease-in-out duration-300 cursor-pointer"}>
+                                    Paket Satın Al
                                 </div>
                             </div>}
                     </h4>

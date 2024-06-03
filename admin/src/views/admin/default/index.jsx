@@ -18,8 +18,6 @@ const Dashboard = () => {
     const axiosPrivate = useAxiosPrivate()
 
     const [requirementComplate, isRender] = useState(false);
-
-    ;
     const {data: branch, isLoading, error} = useQuery('branch', async () => {
         const response = await axiosPrivate.get(`/branch/${auth.branchId}`);
         return response.data.data;
@@ -29,26 +27,22 @@ const Dashboard = () => {
         <div>
 
             <div className="mt-3  flex-col items-center grid grid-cols-12  gap-2">
+                <div className={"col-span-6 h-full"}>
+                    <Package/>
+                </div>
                 {(!requirementComplate && branch) &&
 
-                    <div className={" col-span-12 "}>
+                    <div className={" col-span-6 "}>
                         <Requirements branch={branch} isRender={(e) => isRender(e)}/>
                     </div>
                 }
-
-                <div className={"col-span-12"}>
-                    <Package/>
-                </div>
-
             </div>
 
 
             <div className={"col-span-12"}>
-                <div className={"text-2xl font-bold flex justify-start items-center mt-3"}>
-                    Şubeler
-                </div>
 
                 <Branches/>
+
             </div>
         </div>
     );

@@ -11,7 +11,7 @@ const Addition = ({orders, isOrderLoading}) => {
 
 
     return (
-        <div className={"p-2.5 bg-white rounded drop-shadow-lg"}>
+        <div className={"p-2.5  bg-white h-full rounded drop-shadow-lg"}>
             <div className={"text-lg font-bold text-navy-700 dark:text-white mt-2"}>
                 siparisler
             </div>

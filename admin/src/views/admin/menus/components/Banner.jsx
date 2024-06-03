@@ -74,7 +74,7 @@ const Banner1 = () => {
                     </div>
                 </motion.div>
                 <div className="flex justify-between items-center text-white">
-                    <p>Do you want to add a new menu?</p>
+                    <p>Yeni bir menü eklemek ister misiniz?</p>
                     <button
                         onClick={() => setIsOpen(!isOpen)}
                         className={`transform transition-transform ${isOpen ? 'rotate-180' : ''}`}>

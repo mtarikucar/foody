@@ -10,6 +10,7 @@ import useAxiosPrivate from "../../../../hooks/useAxiosPrivate";
 import {Button} from "@chakra-ui/button";
 import DeleteProduct from "./DeleteProduct";
 import DeleteProductFromMenu from "../../menus/components/DeleteProductFromMenu";
+import {BsPlusSquare, BsXSquare, BsCheckCircle} from "react-icons/bs";
 
 const UpdateProductSchema = Yup.object().shape({
     name: Yup.string().required('Required'),
@@ -20,7 +21,6 @@ const UpdateProductSchema = Yup.object().shape({
 });
 
 function UpdateProduct({isOpen, onClose, productData, menuId}) {
-
     const axiosPrivate = useAxiosPrivate();
     const [fileData, setFileData] = useState([]);
     const [imageUrls, setImageUrls] = useState([]);
@@ -32,10 +32,15 @@ function UpdateProduct({isOpen, onClose, productData, menuId}) {
     const auth = useAuth();
     const queryClient = useQueryClient();
 
+    const [selectedFeatures, setSelectedFeatures] = useState([]);
+    const [newFeatureName, setNewFeatureName] = useState('');
+    const [addFeature, setAddFeature] = useState(false);
+
     useEffect(() => {
         if (productData?.images) {
             setImageUrls(productData.images);
-            setFileData([])
+            setFileData([]);
+            setSelectedFeatures(productData.featureIds || []);
         }
     }, [productData]);
 
@@ -44,14 +49,53 @@ function UpdateProduct({isOpen, onClose, productData, menuId}) {
         return response.data;
     });
 
+    const {data: features, isSuccess} = useQuery('features', async () => {
+        try {
+            const response = await axiosPrivate.get(`/product/features?companyId=${auth.companyId}`);
+            return response.data;
+        } catch (error) {
+            console.log(error);
+        }
+    });
+
+    const addFeatureMutation = useMutation(newFeature => axiosPrivate.post('/product/features', newFeature), {
+        onSuccess: () => {
+            toast.success("Özellik başarıyla eklendi");
+            queryClient.invalidateQueries('features');
+            setNewFeatureName('');
+            setAddFeature(false);
+        },
+        onError: () => {
+            toast.error("Özellik eklenirken hata oluştu");
+        }
+    });
+
+    const handleAddFeature = () => {
+        if (!newFeatureName.trim()) {
+            toast.error("Özellik adı boş olamaz");
+            return;
+        }
+        addFeatureMutation.mutate({name: newFeatureName.trim(), companyId: auth.companyId});
+    };
+
+    const handleFeatureClick = (featureId) => {
+        let newSelectedFeatures = [...selectedFeatures];
+        if (newSelectedFeatures.includes(featureId)) {
+            newSelectedFeatures = newSelectedFeatures.filter(id => id !== featureId);
+        } else {
+            newSelectedFeatures = [featureId, ...newSelectedFeatures];
+        }
+        setSelectedFeatures(newSelectedFeatures);
+    };
+
     const {mutate} = useMutation(
         updatedData => axiosPrivate.put(`/product/${productData.productId}`, updatedData),
         {
             onSuccess: () => {
-                setFileData([])
+                setFileData([]);
                 toast("Ürün başarıyla güncellendi.");
-                queryClient.invalidateQueries("products")
-                onClose()
+                queryClient.invalidateQueries("products");
+                onClose();
             },
             onError: () => {
                 toast.error("Ürün güncellenirken bir hata oluştu.");
@@ -69,6 +113,7 @@ function UpdateProduct({isOpen, onClose, productData, menuId}) {
             setFileData([...fileData, ...selectedFiles]);
         }
     };
+
     const deleteProductModal = () => {
         setDeleteOpen(!deleteOpen);
     };
@@ -86,15 +131,14 @@ function UpdateProduct({isOpen, onClose, productData, menuId}) {
     };
 
     const handleDelete = (id) => {
-        setDeleteOpen(true)
-        setDeleteId(id)
-
+        setDeleteOpen(true);
+        setDeleteId(id);
     };
 
     const handleDeleteMenuProduct = (id) => {
-        setDeleteMenuProduct(true)
-        setMenuProductId(id)
-        console.log(id)
+        setDeleteMenuProduct(true);
+        setMenuProductId(id);
+        console.log(id);
     };
 
     const handleSubmit = async (values) => {
@@ -110,7 +154,8 @@ function UpdateProduct({isOpen, onClose, productData, menuId}) {
             // Veriyi göndermek için hazırla
             const dataToSend = {
                 ...values,
-                images: allImages
+                images: allImages,
+                featureIds: selectedFeatures
             };
 
             // API çağrısı yap (mutate kullanılıyorsa)
@@ -122,16 +167,13 @@ function UpdateProduct({isOpen, onClose, productData, menuId}) {
     };
 
     return (
-        <Modal title={'urun-menu'} description={"menuyu ekleyebillecegin urunler"} size="extraLarge" isOpen={isOpen}
-               onClose={onClose}>
-
+        <Modal title={'Ürün Güncelle'} description={"Ürünü güncelleyebilir ve özellikler ekleyebilirsiniz"}
+               size="extraLarge" isOpen={isOpen} onClose={onClose}>
             <DeleteProduct isOpen={deleteOpen} onClose={deleteProductModal} id={deleteId}/>
-            <DeleteProductFromMenu isOpen={deleteMenuProduct} onClose={deleteMenuProductModal} id={menuProductId}
-                                   menuId={menuId}/>
-
+            <DeleteProductFromMenu isOpen={deleteMenuProduct} close={onClose} onClose={deleteMenuProductModal}
+                                   id={menuProductId} menuId={menuId}/>
             <div className='col-span-2 lg:col-span-1 p-4 shadow-lg rounded-lg bg-white overflow-auto'>
                 <div className={"grid grid-cols-2 gap-4"}>
-
                     <Formik
                         initialValues={{
                             name: productData?.name || '',
@@ -145,23 +187,22 @@ function UpdateProduct({isOpen, onClose, productData, menuId}) {
                         enableReinitialize // Mevcut ürün bilgileri ile formu yeniden başlat
                     >
                         {({errors, touched}) => (
-
                             <Form className='space-y-4'>
-                                <Field name="name" placeholder="Name"
-                                       className='bg-gray-50  col-span-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5'/>
+                                <Field name="name" placeholder="Ad"
+                                       className='bg-gray-50 col-span-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5'/>
                                 {errors.name && touched.name ? <div>{errors.name}</div> : null}
 
-                                <Field name="price" type="number" placeholder="Price"
-                                       className='bg-gray-50  col-span-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5'/>
+                                <Field name="price" type="number" placeholder="Fiyat"
+                                       className='bg-gray-50 col-span-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5'/>
                                 {errors.price && touched.price ? <div>{errors.price}</div> : null}
 
-                                <Field name="ratings" type="number" placeholder="Ratings"
-                                       className='bg-gray-50  col-span-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5'/>
+                                <Field name="ratings" type="number" placeholder="Değerlendirme"
+                                       className='bg-gray-50 col-span-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5'/>
                                 {errors.ratings && touched.ratings ? <div>{errors.ratings}</div> : null}
 
                                 <Field as="select" name="categoryId"
-                                       className='bg-gray-50  col-span-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5'>
-                                    <option value="">Change category</option>
+                                       className='bg-gray-50 col-span-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5'>
+                                    <option value="">Kategori Değiştir</option>
                                     {categories?.data?.map(category => (
                                         <option key={category.categoryId} value={category.categoryId}>
                                             {category.name}
@@ -170,34 +211,41 @@ function UpdateProduct({isOpen, onClose, productData, menuId}) {
                                 </Field>
                                 {errors.categoryId && touched.categoryId ? <div>{errors.categoryId}</div> : null}
 
-                                <Field as="textarea" name="description" placeholder="Description"
-                                       className='bg-gray-50  col-span-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5'/>
+                                <Field as="textarea" name="description" placeholder="Açıklama"
+                                       className='bg-gray-50 col-span-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5'/>
                                 {errors.description && touched.description ? <div>{errors.description}</div> : null}
 
-                                <input type="file" multiple onChange={handleFileChange}
-                                       className='file:mr-4 file:py-2 file:px-4
-          file:rounded-full file:border-0
-          file:text-sm file:font-semibold
-          file:bg-violet-50 file:text-violet-700
-          hover:file:bg-violet-100' disabled={fileData.length >= 3}/>
+                                <div className="flex flex-col">
+                                    <label htmlFor="file-upload" className="mb-2 ml-1 text-sm font-medium text-gray-700">
+                                        Resim Yükle
+                                    </label>
+                                    <input
+                                        id="file-upload"
+                                        type="file"
+                                        multiple
+                                        onChange={handleFileChange}
+                                        className='file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100'
+                                        disabled={fileData.length >= 3}
+                                    />
+                                </div>
 
-                                <button type="submit"
-                                        className='w-full p-2 bg-indigo-700 hover:-translate-y-1 ease-in-out duration-200 text-white rounded-md'>
-                                    Kaydet
-                                </button>
-                                <Button
-                                    onClick={() => handleDelete(productData.productId)}
-                                    className="w-full p-2 bg-red-600 hover:-translate-y-1 ease-in-out duration-200 text-white rounded-md">
-                                    <span className={"text-md "}>Sil</span>
-                                </Button>
+                                <div className={"flex justify-between gap-6"}>
+                                    <button type="submit"
+                                            className='w-full p-2 bg-indigo-700 hover:-translate-y-1 ease-in-out duration-200 text-white rounded-md'>
+                                        Kaydet
+                                    </button>
+                                    <Button
+                                        onClick={() => handleDelete(productData.productId)}
+                                        className="w-full p-2 bg-red-600 hover:-translate-y-1 ease-in-out duration-200 text-white rounded-md">
+                                        <span className={"text-md "}>Sil</span>
+                                    </Button>
+                                </div>
                             </Form>
-
                         )}
                     </Formik>
 
                     <div className={" "}>
-                        <div className='grid grid-cols-4 p-1 gap-1  border-2 rounded-md'>
-
+                        <div className='grid grid-cols-4 p-1 gap-1 border-2 rounded-md'>
                             {productData?.images?.map((image, index) => (
                                 <div
                                     key={index}
@@ -213,7 +261,7 @@ function UpdateProduct({isOpen, onClose, productData, menuId}) {
                                     {hoveredImage === index && (
                                         <button
                                             onClick={() => handleRemoveImages(image)}
-                                            className="absolute top-0   bg-red-500 text-white px-2 rounded-full"
+                                            className="absolute top-0 bg-red-500 text-white px-2 rounded-full"
                                         >
                                             &#10005; {/* Bu, bir çarpı işaretidir */}
                                         </button>
@@ -236,13 +284,40 @@ function UpdateProduct({isOpen, onClose, productData, menuId}) {
                                     {hoveredImage === index && (
                                         <button
                                             onClick={() => handleRemoveImage(index)}
-                                            className="absolute top-0  bg-red-500 text-white px-2 rounded-full"
+                                            className="absolute top-0 bg-red-500 text-white px-2 rounded-full"
                                         >
                                             &#10005; {/* Bu, bir çarpı işaretidir */}
                                         </button>
                                     )}
                                 </div>
                             ))}
+                        </div>
+                        <div className="col-span-2 grid grid-cols-4 mt-4 border-2 rounded-md">
+                            {(isSuccess && features?.data?.length > 0 ? features.data : []).map(feature => (
+                                <div
+                                    key={feature?.featureId}
+                                    className={`p-2 rounded-md m-2 text-center flex items-center justify-center cursor-pointer ${selectedFeatures.includes(feature?.featureId) ? 'bg-indigo-700 text-white' : 'bg-gray-300'}`}
+                                    onClick={() => handleFeatureClick(feature?.featureId)}>
+                                    {feature?.featureName}
+                                </div>
+                            ))}
+
+                            <div className={`p-1 rounded-md m-1 w-full col-span-2 text-center cursor-pointer flex`}>
+                                <input
+                                    type="text"
+                                    placeholder="Yeni Özellik"
+                                    value={newFeatureName}
+                                    onChange={(e) => setNewFeatureName(e.target.value)}
+                                    className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5'
+                                />
+                                <div
+                                    className={`p-2 rounded-md border-1 flex items-center justify-center text-center cursor-pointer ml-2`}
+                                    onClick={handleAddFeature}
+                                >
+                                    <span className='mr-1'>Ekle</span>
+                                    <BsCheckCircle className={"w-5 h-5"}/>
+                                </div>
+                            </div>
                         </div>
 
                         {menuId &&
@@ -252,14 +327,11 @@ function UpdateProduct({isOpen, onClose, productData, menuId}) {
                                 <span className={"text-md "}>Menüden Sil</span>
                             </Button>
                         }
-
                     </div>
                 </div>
 
 
             </div>
-
-
         </Modal>
     );
 }

@@ -38,7 +38,7 @@ public class BranchService {
             Branch branch = new Branch();
             BeanUtils.copyProperties(branchAddReq, branch);
             branch.setLocationId(saveLocation.getLocationId());
-
+            log.info("branch: {} ",branch);
             return branchRepository.save(branch);
         } catch (Exception e) {
             log.error("Error saving branch: ", e);
@@ -58,7 +58,23 @@ public class BranchService {
 
     public List<Branch> findAll(Optional<UUID> companyId) throws HandledException {
         try {
-            return branchRepository.findAllByCompanyId(companyId);
+            List<Branch> branches = branchRepository.findAllByCompanyId(companyId);
+
+            for (Branch branch : branches) {
+                Optional<Locations> locationOpt = locationRepository.findById(branch.getLocationId());
+                if (locationOpt.isPresent()) {
+                    Locations location = locationOpt.get();
+                    String fullAddress = String.format("%s, %s, %s, No: %d, Apt: %d",
+                            location.getStreet(),
+                            location.getDistrict(),
+                            location.getCity(),
+                            location.getBuildingNumber(),
+                            location.getApartmentNumber());
+                    branch.setAddress(fullAddress);
+                }
+            }
+
+            return branches;
         } catch (Exception e) {
             log.error("Error finding all branches", e);
             throw new HandledException(400,"Şubeler bulunurken hata oluştu");

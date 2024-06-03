@@ -91,12 +91,11 @@ public class ProductService {
 
     public Product update(UUID id, ProductUpdateReq productUpdateReq) {
         try {
-            Product product = productRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + id));
+            Product product = productRepository.findById(id)
+                    .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + id));
+
             CustomBeanUtils.copyNonNullProperties(productUpdateReq, product);
             product.setCreateTime(new Date());
-            log.info("productUpdateReq :{}",productUpdateReq);
-            log.info("product :{}",product);
-
             return productRepository.save(product);
         } catch (Exception e) {
             log.error("Error updating product with id: {}", id, e);

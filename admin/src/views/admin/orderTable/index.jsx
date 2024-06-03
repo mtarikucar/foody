@@ -15,8 +15,6 @@ import {toast} from "react-toastify";
 
 
 const OrderTable = () => {
-
-
     const [addedProducts, setAddedProducts] = useState([]);
     const [category, setCategory] = useState(null);
     const [paymentModal, setPaymentModal] = useState(false);
@@ -24,11 +22,10 @@ const OrderTable = () => {
 
     const axiosPrivate = useAxiosPrivate();
     const auth = useAuth();
-    const {id} = useParams();
+    const { id } = useParams();
     const location = useLocation();
-    const socket = useWebSocket()
+    const socket = useWebSocket();
     const queryClient = useQueryClient();
-
 
     useEffect(() => {
         if (!socket) return;
@@ -40,44 +37,29 @@ const OrderTable = () => {
         });
         return () => {
             socket.unsubscribe('/topic/order/' + id);
-        }
-    }, [socket, location, auth.branchId, id, queryClient])
+        };
+    }, [socket, location, auth.branchId, id, queryClient]);
 
-
-    const {
-        data: categories,
-        isLoading: isCategoryLoading,
-        isSuccess: isCategorySuccess
-    } = useQuery('categories', async () => {
+    const { data: categories, isLoading: isCategoryLoading, isSuccess: isCategorySuccess } = useQuery('categories', async () => {
         const response = await axiosPrivate.get(`/category?${auth.companyId}`);
         return response.data.data;
     });
 
-    const {
-        data: products,
-        isLoading: isProductLoading,
-    } = useQuery(['products', category], async () => {
+    const { data: products, isLoading: isProductLoading } = useQuery(['products', category], async () => {
         const response = await axiosPrivate.get(`/product/list-non-pageable`, {
-            params: {
-                companyId: auth.companyId, menuId: auth.menuId, categoryId: category
-            }
+            params: { companyId: auth.companyId, menuId: auth.menuId, categoryId: category }
         });
         return response.data.data;
     });
 
-    const {
-        data: orders,
-        isLoading: isOrderLoading
-    } = useQuery(['tableOrder'], async () => {
+    const { data: orders, isLoading: isOrderLoading } = useQuery(['tableOrder'], async () => {
         const response = await axiosPrivate.get(`/orders?branchId=${auth?.branchId}&status=1&tableId=${id}`);
         return response.data.data;
     });
 
-
     const submitQuickPayment = async () => {
         try {
             if (!socket.connected) {
-
                 await reconnectWebSocket();
             }
             const orderIds = orders.map(order => order.orderId); // Assuming each order has an ID
@@ -86,16 +68,16 @@ const OrderTable = () => {
                 tableId: id,
                 amount: amount,
                 cash: amount,
-                card:  null,
-                other:  null,
+                card: null,
+                other: null,
                 orderIds: orderIds,
             };
 
             socket.send("/app/addition/" + auth.branchId + "/" + id, {}, JSON.stringify(payload));
             socket.send("/app/notification/" + auth.currentUser, {}, JSON.stringify({
-                content: "ödeme tamalanmıştır.", userId: auth.currentUser, createTimestamp: new Date().getTime()
+                content: "Ödeme tamamlanmıştır.", userId: auth.currentUser, createTimestamp: new Date().getTime()
             }));
-            toast("ödeme tamamlandı");
+            toast("Ödeme tamamlandı");
 
             queryClient.invalidateQueries(['additionOrder']);
         } catch (error) {
@@ -113,100 +95,95 @@ const OrderTable = () => {
             console.error('WebSocket reconnection failed:', error);
         }
     };
-    return (<>
 
-        <PaymentModal isOpen={paymentModal} onClose={() => setPaymentModal(!paymentModal)} tableId={id}
-                      socket={socket}/>
-        <QuickPaymentModal isOpen={quickPaymentModal} onClose={() => setQuickPaymentModal(!quickPaymentModal)}
-                           tableId={id} socket={socket}/>
+    return (
+        <>
+            <PaymentModal isOpen={paymentModal} onClose={() => setPaymentModal(!paymentModal)} tableId={id} socket={socket} />
+            <QuickPaymentModal isOpen={quickPaymentModal} onClose={() => setQuickPaymentModal(!quickPaymentModal)} tableId={id} socket={socket} />
 
-        <div className="mt-3 grid h-full grid-cols-1 sm:grid-cols-3 gap-5">
+            <div className="mt-3 grid h-full grid-cols-1 sm:grid-cols-3 gap-5">
+                <div className="h-dvh  ">
 
-            <div className={"max-h-dvh overflow-y-scroll "}>
+                        {addedProducts.length > 0 &&
+                            <Temporary addedProducts={addedProducts} setAddedProducts={setAddedProducts} />
+                        }
 
-                <div className={"overflow-y-scroll"}>
-                    {addedProducts.length > 0 &&
-                        <Temporary addedProducts={addedProducts} setAddedProducts={setAddedProducts} />
+                    <Addition orders={orders} isOrderLoading={isOrderLoading} />
+                    {
+                        orders?.length > 0 &&
+                        <div className="sticky bottom-0 w-full rounded-t flex justify-center items-center bg-white">
+                            <div className="flex justify-center items-center w-full space-x-4 p-4">
+                                <button
+                                    className="flex justify-center items-center hover:bg-gray-200 ease-in-out duration-300 size-16 rounded drop-shadow-lg p-4 bg-white cursor-pointer w-full"
+                                    onClick={() => { setPaymentModal(true); }}
+                                >
+                                    Öde
+                                </button>
+
+                                <button
+                                    className="flex justify-center items-center hover:bg-gray-200 ease-in-out duration-300 size-16 rounded drop-shadow-lg p-4 bg-white cursor-pointer w-full"
+                                    onClick={() => { submitQuickPayment(); }}
+                                >
+                                    Hızlı Öde
+                                </button>
+                            </div>
+                        </div>
                     }
                 </div>
-                <Addition orders={orders} isOrderLoading={isOrderLoading}/>
-                {
-                    orders?.length > 0 &&
-                    <div className={" sticky bottom-0  w-full  rounded-t flex justify-center items-center"}>
-                        <div className={"flex justify-center items-center w-full"}>
 
-
+                <div className="col-span-2 bg-white h-dvh ">
+                    <div className="border-2 rounded-md border-opacity-50 grid grid-cols-8 gap-2 p-3">
+                        {isCategoryLoading ? <Spinner loading={true} size={24}/> : null}
+                        {isCategorySuccess && categories.length > 0 && categories.map(item =>
                             <div
-                                className={"flex justify-center items-center hover:bg-gray-200 ease-in-out duration-300 size-16 rounded drop-shadow-lg  m-4 bg-white cursor-pointer w-full"}
-                                onClick={() => {
-                                    setPaymentModal(true)
-                                }}>
-                                öde
+                                key={item.categoryId}
+                                className={`rounded w-full ${category === item.categoryId ? "bg-indigo-500 text-white" : ''} p-3 cursor-pointer flex border-2 border-indigo-500 hover:text-white items-center justify-center  hover:bg-indigo-500 transition-colors min-w-[150px] mx-1`}
+                                onClick={() => setCategory(item.categoryId)}
+                            >
+                                {item.name}
                             </div>
-
-                            <div
-                                className={"flex justify-center items-center hover:bg-gray-200 ease-in-out duration-300 size-16 rounded drop-shadow-lg  m-4 bg-white cursor-pointer w-full"}
-                                onClick={() => {
-                                    submitQuickPayment()
-                                }}>
-                                hızlı öde
-                            </div>
-
-                        </div>
+                        )}
                     </div>
-                }
-            </div>
 
+                    <div className="w-full flex justify-center items-center py-4">
+                        {isProductLoading ? <Spinner loading={true} size={48}/> : null}
+                    </div>
 
-            <div className=" col-span-2 max-h-dvh overflow-y-scroll">
-                <div className="border-2 border-opacity-50 flex  items-start justify-start rounded overflow-x-scroll">
-
-                    <Spinner loading={isCategoryLoading} size={24}/>
-                    {isCategorySuccess && categories.length > 0 && categories?.map(item =>
-                        <div
-                            key={item.categoryId}
-                            className={`rounded w-full ${category === item.categoryId ? "bg-indigo-500 text-white" : ''} p-3 drop-shadow-lg  flex items-center justify-center cursor-pointer hover:bg-gray-500 transition-colors min-w-[250px]`}
-                            onClick={() => setCategory(item.categoryId)}>
-                            {item.name}
-                        </div>
-                    )}
-                </div>
-                <div className={"w-full flex justify-center items-center"}>
-                    <Spinner loading={isProductLoading} size={48}/>
-                </div>
-
-                <div
-                    className="border-2 border-opacity-50 col-span-2 rounded p-2 grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:col-span-4 gap-5">
-                    {products?.map(product =>
-
-                        <div
-                            key={product.productId}
-                            className="relative w-48 sm:w-64 p-4 m-auto bg-white shadow-lg rounded-2xl dark:bg-gray-900 cursor-pointer hover:bg-opacity-50"
-                            onClick={() => setAddedProducts([...addedProducts, product])}>
-
-                            <div className="w-full h-full text-center">
-                                <div className="flex flex-col justify-between h-full">
-                                   {/* <img src={product.images[0]} alt="product" className={"rounded drop-shadow"}/>*/}
-                                    <p className="absolute text-sm italic text-gray-800 dark:text-white top-2 right-2">
+                    <div
+                        className="col-span-2 rounded p-2 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-5">
+                        {products?.map(product =>
+                            <div
+                                key={product.productId}
+                                className="relative w-full h-48 bg-white shadow-lg rounded-2xl dark:bg-gray-900 cursor-pointer bg-opacity-50 transition ease-in-out duration-300 overflow-hidden"
+                                onClick={() => setAddedProducts([...addedProducts, product])}
+                                style={{
+                                    backgroundImage: `url(${product.images[0]})`,
+                                    backgroundSize: 'cover',
+                                    backgroundPosition: 'center',
+                                    filter: 'brightness(80%)'
+                                }}
+                            >
+                                <div
+                                    className="absolute inset-0 flex flex-col justify-center items-center text-center p-4">
+                                    <p className="text-sm italic text-white mb-2">
                                         {product.category}
                                     </p>
-                                    <p className="mt-4 text-lg text-gray-900 dark:text-white">
+                                    <p className="text-lg text-white font-bold mb-2">
                                         {product.name}
                                     </p>
-                                    <p className="px-6 py-2 text-xs font-thin text-gray-700 dark:text-gray-50">
-                                        {product.price}
+                                    <p className="text-xs font-thin text-white">
+                                        ₺{product.price}.00
                                     </p>
                                 </div>
                             </div>
-                        </div>
-                    )}
+                        )}
+                    </div>
+
+
                 </div>
             </div>
-        </div>
-    </>);
+        </>
+    );
 };
 
 export default OrderTable;
-
-
-/**/
