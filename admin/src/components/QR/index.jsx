@@ -2,10 +2,12 @@ import React, {useRef} from 'react';
 import {QRCodeSVG} from 'qrcode.react';
 
 import html2canvas from "html2canvas";
+import useAuth from "../../hooks/useAuth";
 
 
 const Index = ({ qrValue, tableNumber, restaurantName }) => {
     const qrCardRef = useRef();
+    const auth = useAuth();
 
     const downloadQRCode = () => {
         html2canvas(qrCardRef.current).then((canvas) => {
@@ -17,10 +19,10 @@ const Index = ({ qrValue, tableNumber, restaurantName }) => {
         });
     };
 
-    const url =`https://muhammedtarikucar.com/`
+    const url =`http://branch.philofoody.com/` + auth.branchId;
     return (
         <>
-            <div ref={qrCardRef} className="flex justify-center items-center rounded-2xl shadow-2xl">
+            <div  className="flex justify-center items-center rounded-2xl shadow-2xl">
                 <div className="overflow-hidden shadow-lg rounded-2xl h-90 w-64 md:w-80 bg-white p-5">
                     <div className="w-full block h-full">
                         <div className="bg-yellow-400 w-full h-20 rounded-t-lg flex justify-center items-center">
@@ -28,8 +30,9 @@ const Index = ({ qrValue, tableNumber, restaurantName }) => {
                                 West room U1 table
                             </p>
                         </div>
-                        <div className="w-full h-full flex justify-center items-center ">
+                        <div  className="w-full h-full flex justify-center items-center ">
                             <QRCodeSVG
+                                ref={qrCardRef}
                                 id={`qr-code-${tableNumber}`}
                                 value={url}
                                 size={196}

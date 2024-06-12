@@ -67,17 +67,14 @@ public class CompanyPackageService {
         return now.after(calendar.getTime());
     }
 
-    private void setExpireDateBasedOnDuration(CompanyPackage companyPackage, String duration) {
+    private void setExpireDateBasedOnDuration(CompanyPackage companyPackage, Integer duration) {
         Calendar calendar = Calendar.getInstance();
-        if ("1 year".equals(duration)) {
-            calendar.add(Calendar.YEAR, 1);
-        } else if ("1 month".equals(duration)) {
-            calendar.add(Calendar.MONTH, 1);
-        }
+        calendar.setTime(new Date());
+        calendar.add(Calendar.MONTH, duration);
         companyPackage.setExpireDate(calendar.getTime());
     }
 
-    private CompanyPackage updateSubscriptionExpireDate(CompanyPackage companyPackage, String duration) {
+    private CompanyPackage updateSubscriptionExpireDate(CompanyPackage companyPackage, Integer duration) {
         setExpireDateBasedOnDuration(companyPackage, duration);
         return companyPackage;
     }

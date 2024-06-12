@@ -24,7 +24,7 @@ public class Package {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID packageId;
 
-    private String duration;
+    private Integer duration;
     private Long price;
 
 

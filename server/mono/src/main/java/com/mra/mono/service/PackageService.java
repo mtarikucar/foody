@@ -31,7 +31,7 @@ public class PackageService {
     private PackageRepository packageRepository;
 
     public List<Package> getAllPackages() {
-        return packageRepository.findAll();
+        return packageRepository.findAllByOrderByDurationDesc();
     }
 
     public Package createPackage(Package newPackage){

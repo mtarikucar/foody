@@ -15,27 +15,13 @@ import Branches from "../profile/components/branches";
 const Dashboard = () => {
 
     const auth = useAuth();
-    const axiosPrivate = useAxiosPrivate()
 
-    const [requirementComplate, isRender] = useState(false);
-    const {data: branch, isLoading, error} = useQuery('branch', async () => {
-        const response = await axiosPrivate.get(`/branch/${auth.branchId}`);
-        return response.data.data;
-    });
 
     return (
         <div>
 
             <div className="mt-3  flex-col items-center grid grid-cols-12  gap-2">
-                <div className={"col-span-6 h-full"}>
-                    <Package/>
-                </div>
-                {(!requirementComplate && branch) &&
 
-                    <div className={" col-span-6 "}>
-                        <Requirements branch={branch} isRender={(e) => isRender(e)}/>
-                    </div>
-                }
             </div>
 
 

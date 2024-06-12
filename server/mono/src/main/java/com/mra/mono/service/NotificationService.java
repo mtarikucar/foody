@@ -46,14 +46,32 @@ public class NotificationService {
 
     public List<Notification> findAll(Optional<UUID> userId) {
         try {
-            return notificationRepository.findAllByUserId(userId);
+            return notificationRepository.findAllByUserIdOrderByCreateTimeDesc(userId);
         } catch (Exception e) {
             log.error("Error finding all branches", e);
             throw e;
         }
     }
 
+    public void markAsRead(UUID notificationId) {
+        try {
+            Notification notification = notificationRepository.findById(notificationId).orElseThrow(() -> new RuntimeException("Notification not found"));
+            notification.setRead(true);
+            notificationRepository.save(notification);
+        } catch (Exception e) {
+            log.error("Error marking notification as read", e);
+            throw e;
+        }
+    }
 
+    /*public List<Notification> findLast10(Optional<UUID> userId) {
+        try {
+            return notificationRepository.findTop10ByUserIdOrderByCreateTimeDesc(userId);
+        } catch (Exception e) {
+            log.error("Error finding last 10 branches", e);
+            throw e;
+        }
+    }*/
 
 
 

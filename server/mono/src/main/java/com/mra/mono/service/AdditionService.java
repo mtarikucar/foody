@@ -27,6 +27,7 @@ public class AdditionService {
     @Transactional
     public Addition createAddition(AdditionAddRequest additionAddRequest) {
         try {
+
             Addition addition = new Addition();
             BeanUtils.copyProperties(additionAddRequest, addition);
             additionAddRequest.getOrderIds().forEach(orderId -> orderService.changeOrderStatus(orderId, 2));

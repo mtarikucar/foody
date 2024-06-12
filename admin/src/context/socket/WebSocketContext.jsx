@@ -36,7 +36,7 @@ export const WebSocketProvider = ({ children }) => {
                 });
             }
         };
-    }, [webSocket]);
+    }, []);
 
     return (
         <WebSocketContext.Provider value={{ webSocket }}>

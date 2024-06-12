@@ -62,7 +62,7 @@ export default function SignInPage() {
 
     return (
 
-        <div className="mb-16 flex h-dvh w-full items-center justify-center px-2 min-h-screen">
+        <div className="mb-16 flex  w-full items-center justify-center px-2 ">
             <div className="mt-[10vh] w-full flex-col items-center max-w-[420px] ">
                 <h4 className="mb-2.5 text-4xl font-bold text-navy-700 dark:text-white">
                     Giriş Yap

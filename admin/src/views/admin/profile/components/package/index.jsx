@@ -62,7 +62,7 @@ const Package = () => {
                         {packageData?.packageId ? <BsEmojiLaughing /> : <BsEmojiExpressionless />}
                     </div>
                     <h4 className="mb-px mt-3 text-md font-bold text-navy-700 dark:text-white">
-                        {packageData?.packageId ? `Your Plan: ${packageData.packageId}` :
+                        {packageData?.packageId ? `Paketinin bitmesine kalan gün: ${Math.floor((new Date(endDate) - new Date()) / (1000 * 60 * 60 * 24) + 1)}` :
                             <div className={"flex flex-col justify-center items-center gap-2"}>
                                Bir plan seçin
                                 <div onClick={() => setPackageModal(true)}

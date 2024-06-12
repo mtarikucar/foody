@@ -9,7 +9,7 @@ const MailFbModal = ({isOpen, onClose, email}) => {
 
     const mutation = useMutation(data => axios.post(`/sendOtp?email=${data.email}`), {
         onSuccess: () => {
-            window.location.href = "https://mail.google.com";
+            window.location.href = "https://mail.google.com/mail/u/" + emailValue;
         },
 
     });
@@ -24,7 +24,7 @@ const MailFbModal = ({isOpen, onClose, email}) => {
     };
 
     return (
-        <Modal isOpen={isOpen} onClose={onClose} size="extraLarge"
+        <Modal isOpen={isOpen} onClose={onClose} size="medium"
                title="Şifreni mi unuttun" className="rounded-lg shadow-lg">
             <div>
                 <p className="text-sm text-gray-500">

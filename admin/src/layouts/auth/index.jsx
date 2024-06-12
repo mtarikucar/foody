@@ -8,36 +8,28 @@ export default function Auth() {
     return routes.map((prop, key) => {
       if (prop.layout === "/auth") {
         return (
-          <Route path={`/${prop.path}`} element={prop.component} key={key} />
+            <Route path={`/${prop.path}`} element={prop.component} key={key} />
         );
       } else {
         return null;
       }
     });
   };
-  document.documentElement.dir = "ltr";
-  return (
-    <div>
-      <div className="  h-dvh min-h-screen w-full !bg-white dark:!bg-navy-900">
-        <FixedPlugin />
-        <main className={`mx-auto min-h-screen`}>
-          <div className=" flex min-h-screen">
-            <div className="mx-auto flex  w-full flex-col justify-start pt-12 md:max-w-[75%] min-h-screen lg:max-w-[1013px] lg:px-8 lg:pt-0 xl:h-[100vh] xl:max-w-[1383px] xl:px-0 ">
-              <div className="flex flex-col ">
-                <Routes>
-                  {getRoutes(routes)}
-                  <Route
-                    path="/"
-                    element={<Navigate to="/auth/sign-in" replace />}
-                  />
-                </Routes>
 
-              </div>
-              <Footer />
-            </div>
+  document.documentElement.dir = "ltr";
+
+  return (
+      <div className="flex flex-col h-screen w-full !bg-white dark:!bg-navy-900">
+        <FixedPlugin />
+        <main className="flex-grow mx-auto flex flex-col justify-between">
+          <div className="flex-grow flex flex-col justify-center items-center">
+            <Routes>
+              {getRoutes(routes)}
+              <Route path="/" element={<Navigate to="/auth/sign-in" replace />} />
+            </Routes>
           </div>
+          <Footer />
         </main>
       </div>
-    </div>
   );
 }

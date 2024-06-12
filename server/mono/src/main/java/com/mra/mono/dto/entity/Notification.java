@@ -25,6 +25,7 @@ public class Notification {
     private String content;
     private Date sentDate;
     private Date createTime;
+    private boolean read;
 
 
     // Getters, Setters, Constructors

@@ -4,7 +4,7 @@ import React from 'react';
 const PricingToggle = ({ isAnnual, setIsAnnual }) => {
     return (
         <div className="flex items-center justify-center my-4 ">
-            <span className="text-sm mr-3">Aylik</span>
+            <span className="text-sm mr-3">AYLIK</span>
             <div className="relative">
                 <input
                     id="toggle"
@@ -23,7 +23,7 @@ const PricingToggle = ({ isAnnual, setIsAnnual }) => {
                     }`}
                 ></div>
             </div>
-            <span className="text-sm ml-3">yillik</span>
+            <span className="text-sm ml-3">YILLIK</span>
         </div>
     );
 };

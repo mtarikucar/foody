@@ -6,7 +6,6 @@ import {NavLink} from "react-router-dom";
 
 const   Requirements = ({branch, isRender}) => {
 
-    console.log(branch)
     const renderWarnings = () => {
         const branchDetails = {
             'companyId': {text: 'Şube bir şirket\'e bağlı', url: "/admin/profile"},

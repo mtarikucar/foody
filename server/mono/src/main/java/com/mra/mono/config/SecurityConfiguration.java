@@ -80,10 +80,10 @@ public class SecurityConfiguration {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.setAllowedOrigins(Arrays.asList("http://localhost:3001","http://localhost:5173","http://156.67.28.139:80","http://localhost:8090/","http://localhost:8090","http://156.67.28.139:8090/","http://156.67.28.139:8090","http://156.67.28.139","http://localhost:9090/","http://localhost:9090","http://156.67.28.139:9090/","http://156.67.28.139:9090","http://156.67.28.139", "http://front:80"));
+        config.setAllowedOrigins(Arrays.asList("http://localhost:3000","http://localhost:3001","http://localhost:5173","http://management.philofoody.com","http://branch.philofoody.com"));
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-Requested-With", "Accept"));
-        config.setMaxAge(3600L); // Preflight cache süresi
+        config.setMaxAge(3600L);
 
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);

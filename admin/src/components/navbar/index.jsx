@@ -1,69 +1,36 @@
+// Navbar.js
 import React, { useEffect, useState } from "react";
 import Dropdown from "../dropdown";
 import { FiAlignJustify } from "react-icons/fi";
 import { Link } from "react-router-dom";
-import navbarimage from "../../assets/img/layout/Navbar.png";
-import { BsArrowBarUp } from "react-icons/bs";
 import { FiSearch } from "react-icons/fi";
-import { RiMoonFill, RiSunFill } from "react-icons/ri";
-import {
-    IoMdNotificationsOutline,
-    IoMdInformationCircleOutline,
-} from "react-icons/io";
 import avatar from "../../assets/img/avatars/avatar4.png";
 import { useDispatch } from "react-redux";
 import { logoutSuccess } from "../../store/AuthSlice";
 import useAuth from "../../hooks/useAuth";
-import { useWebSocket } from "../../context/socket/WebSocketContext";
-import { useQuery, useQueryClient } from "react-query";
-import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+
+import Notifications from "./Notifications";
+import Briefs from "./Briefs";
+
 
 const Navbar = (props) => {
     const { onOpenSidenav, brandText } = props;
     const [darkmode, setDarkmode] = useState(false);
-    const [receivedData, setReceivedData] = useState([]);
-    const axiosPrivate = useAxiosPrivate();
+
     const dispatch = useDispatch();
     const auth = useAuth();
-    const socket = useWebSocket();
-    const queryClient = useQueryClient();
 
-    useEffect(() => {
-        if (socket) {
-            socket.subscribe("/topic/notification/" + auth.currentUser, (message) => {
-                setReceivedData((receivedData) => [
-                    ...receivedData,
-                    JSON.parse(message.body),
-                ]);
-            });
-        }
-
-        return () => {
-            socket?.unsubscribe("/topic/notification/" + auth.currentUser);
-        };
-    }, [socket]);
-
-    const { data: notification } = useQuery("notification", async () => {
-        const response = await axiosPrivate.get(
-            `/notification?userId=${auth.currentUser}`
-        );
-        return response.data.data;
-    });
-
-    useEffect(() => {
-        queryClient.invalidateQueries("notification");
-    }, [receivedData]);
 
     return (
-        <nav className="sticky top-4 z-40 flex flex-row flex-wrap items-center justify-between rounded-xl bg-white/10 p-2 backdrop-blur-xl dark:bg-[#0b14374d]">
+        <nav className="sticky top-4 z-40 flex flex-row flex-wrap items-center justify-between rounded-xl bg-white/10 p-2  dark:bg-[#0b14374d]">
             <div className="relative mt-[3px] flex h-[61px] w-[355px] flex-grow items-center justify-around gap-2 rounded-full bg-white px-2 py-2 shadow-xl shadow-shadow-500 dark:!bg-navy-800 dark:shadow-none md:w-[365px] md:flex-grow-0 md:gap-1 xl:w-[365px] xl:gap-2">
                 {/* Profile & Dropdown */}
                 <span
                     className="flex cursor-pointer text-xl text-gray-600 dark:text-white ml-3"
                     onClick={onOpenSidenav}
                 >
-          <FiAlignJustify className="h-5 w-5" />
-        </span>
+                    <FiAlignJustify className="h-5 w-5" />
+                </span>
 
                 <div className="flex h-full items-center rounded-full bg-lightPrimary text-navy-700 dark:bg-navy-900 dark:text-white xl:w-[225px]">
                     <p className="pl-3 pr-2 text-xl">
@@ -76,41 +43,8 @@ const Navbar = (props) => {
                     />
                 </div>
 
-                <Dropdown
-                    button={
-                        <p className="cursor-pointer">
-                            <IoMdNotificationsOutline className="h-4 w-4 text-gray-600 dark:text-white" />
-                        </p>
-                    }
-                    children={
-                        <div className="flex w-[360px] flex-col gap-3 rounded-[20px] bg-white p-4 shadow-xl shadow-shadow-500 dark:!bg-navy-700 dark:text-white dark:shadow-none sm:w-[460px] max-h-[50vh] overflow-y-scroll sm:absolute sm:left-0 sm:translate-x-0 translate-x-[-100%]">
-                            <div className="flex items-center justify-between">
-                                <p className="text-base font-bold text-navy-700 dark:text-white">
-                                    Notification
-                                </p>
-                                <p className="text-sm font-bold text-navy-700 dark:text-white">
-                                    Mark all read
-                                </p>
-                            </div>
-                            {notification?.map((item, index) => (
-                                <button key={index} className="flex w-full items-center">
-                                    <div className="flex h-full w-[85px] items-center justify-center rounded-xl bg-gradient-to-b from-brandLinear to-brand-500 py-4 text-2xl text-white">
-                                        <BsArrowBarUp />
-                                    </div>
-                                    <div className="ml-2 flex h-full w-full flex-col justify-center rounded-lg px-1 text-sm">
-                                        <p className="mb-1 text-left text-base font-bold text-gray-900 dark:text-white">
-                                            {item.content}
-                                        </p>
-                                        <p className="font-base text-left text-xs text-gray-900 dark:text-white">
-                                            {item.createTime}
-                                        </p>
-                                    </div>
-                                </button>
-                            ))}
-                        </div>
-                    }
-                    classNames={"py-2 top-4 w-max"}
-                />
+                <Notifications />
+                <Briefs/>
 
                 <Dropdown
                     button={
@@ -159,8 +93,8 @@ const Navbar = (props) => {
                     >
                         Sayfalar
                         <span className="mx-1 text-sm text-navy-700 hover:text-navy-700 dark:text-white">
-              /
-            </span>
+                            /
+                        </span>
                     </a>
                     <Link
                         className="text-sm font-normal capitalize text-navy-700 hover:underline dark:text-white dark:hover:text-white"

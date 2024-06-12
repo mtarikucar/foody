@@ -87,6 +87,8 @@ const Temporary = ({addedProducts, setAddedProducts}) => {
 
     const handleSubmit = async () => {
         try {
+
+
             const productRequests = calculateProductQuantities(addedProducts);
 
             const saveOrder = {
@@ -103,6 +105,7 @@ const Temporary = ({addedProducts, setAddedProducts}) => {
                 content: "Siparişiniz alınmıştır.", userId: auth.currentUser, createTimestamp: new Date().getTime()
             }));
             setAddedProducts([]);
+
         } catch (e) {
             console.log(e);
         }

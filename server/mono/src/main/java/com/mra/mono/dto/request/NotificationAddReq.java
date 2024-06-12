@@ -17,4 +17,7 @@ public class NotificationAddReq {
 
     @NotNull(message = "createTime is not null")
     private Date createTime;
+
+    @NotNull(message = "createTime is not null")
+    private boolean read;
 }

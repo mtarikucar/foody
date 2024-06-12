@@ -101,7 +101,7 @@ const OrderTable = () => {
             <PaymentModal isOpen={paymentModal} onClose={() => setPaymentModal(!paymentModal)} tableId={id} socket={socket} />
             <QuickPaymentModal isOpen={quickPaymentModal} onClose={() => setQuickPaymentModal(!quickPaymentModal)} tableId={id} socket={socket} />
 
-            <div className="mt-3 grid h-full grid-cols-1 sm:grid-cols-3 gap-5">
+            <div className="mt-3 grid h-full grid-cols-1 md:grid-cols-3 gap-5">
                 <div className="h-dvh  ">
 
                         {addedProducts.length > 0 &&
@@ -132,12 +132,12 @@ const OrderTable = () => {
                 </div>
 
                 <div className="col-span-2 bg-white h-dvh ">
-                    <div className="border-2 rounded-md border-opacity-50 grid grid-cols-8 gap-2 p-3">
+                    <div className="border-2 rounded-md border-opacity-50 grid lg:grid-cols-6 md:grid-cols-4 grid-cols-2 gap-2 p-3">
                         {isCategoryLoading ? <Spinner loading={true} size={24}/> : null}
                         {isCategorySuccess && categories.length > 0 && categories.map(item =>
                             <div
                                 key={item.categoryId}
-                                className={`rounded w-full ${category === item.categoryId ? "bg-indigo-500 text-white" : ''} p-3 cursor-pointer flex border-2 border-indigo-500 hover:text-white items-center justify-center  hover:bg-indigo-500 transition-colors min-w-[150px] mx-1`}
+                                className={`rounded w-full ${category === item.categoryId ? "bg-indigo-500 text-white" : ''} p-3 cursor-pointer flex border-2 border-indigo-500 hover:text-white items-center justify-center  hover:bg-indigo-500 transition-colors  mx-1`}
                                 onClick={() => setCategory(item.categoryId)}
                             >
                                 {item.name}
@@ -157,7 +157,7 @@ const OrderTable = () => {
                                 className="relative w-full h-48 bg-white shadow-lg rounded-2xl dark:bg-gray-900 cursor-pointer bg-opacity-50 transition ease-in-out duration-300 overflow-hidden"
                                 onClick={() => setAddedProducts([...addedProducts, product])}
                                 style={{
-                                    backgroundImage: `url(${product.images[0]})`,
+                                    backgroundImage: `url(${product.images ? product.images[0] : ""})`,
                                     backgroundSize: 'cover',
                                     backgroundPosition: 'center',
                                     filter: 'brightness(80%)'

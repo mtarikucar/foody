@@ -19,8 +19,8 @@ const queryClient = new QueryClient();
 
 root.render(
     <Router>
-        <Provider store={store}>
-            <WebSocketProvider>
+        <WebSocketProvider>
+            <Provider store={store}>
                 <PersistGate loading={null} persistor={persistor}>
                     <QueryClientProvider client={queryClient}>
                         <DevSupport ComponentPreviews={ComponentPreviews} useInitialHook={useInitial}>
@@ -28,8 +28,8 @@ root.render(
                         </DevSupport>
                     </QueryClientProvider>
                 </PersistGate>
-            </WebSocketProvider>
-        </Provider>
+            </Provider>
+        </WebSocketProvider>
     </Router>
 );
 
