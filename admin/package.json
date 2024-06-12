@@ -25,6 +25,7 @@
     "@testing-library/user-event": "^13.5.0",
     "apexcharts": "3.35.5",
     "axios": "^1.6.0",
+    "caniuse-lite": "^1.0.30001632",
     "dotenv": "^16.4.5",
     "file-saver": "^2.0.5",
     "firebase": "^10.6.0",
