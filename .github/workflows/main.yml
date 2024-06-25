@@ -26,15 +26,15 @@ jobs:
 
     # Build the admin project
     - name: Build Admin
-      run: npm run build --prefix ./admin
+      run: CI=false npm run build --prefix ./admin
 
     # Build the client project
     - name: Build Client
-      run: npm run build --prefix ./client
+      run: CI=false npm run build --prefix ./client
 
     # Build the landing project
     - name: Export Landing
-      run: npm run export --prefix ./landing
+      run: CI=false npm run export --prefix ./landing
 
     # Deploy all projects
     - name: Deploy Projects
