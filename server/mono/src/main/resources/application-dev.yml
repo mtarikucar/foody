@@ -11,11 +11,12 @@ server:
     direct-buffers: true
 
 
+# url: jdbc:postgresql://34.141.28.72:5432/menu
 spring:
   datasource:
-    url: jdbc:postgresql://34.141.28.72:5432/menu
+    url: jdbc:postgresql://35.246.231.156:5432/menu
     username: postgres
-    password: postgres
+    password: 123
 
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect

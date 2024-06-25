@@ -1,7 +1,7 @@
 import axios from "axios";
 
 //const BASE_URL ="http://localhost:8080/api/menu/v1";
-const BASE_URL = 'http://156.67.28.139:8080/api/menu/v1';
+const BASE_URL = 'https://api.philofoody.com/api/menu/v1';
 
 const axioss = axios.create({
     baseURL: BASE_URL,
