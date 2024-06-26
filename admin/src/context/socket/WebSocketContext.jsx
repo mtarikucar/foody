@@ -9,7 +9,7 @@ export const WebSocketProvider = ({ children }) => {
 
     useEffect(() => {
         const connectWebSocket = () => {
-            const socket = new SockJS(process.env.REACT_APP_BASE_API_URL + '/ws');
+            const socket = new SockJS("https://api.philofoody.com/api/menu/v1" + '/ws');
             const stompClient = Stomp.over(socket);
 
             const connectCallback = () => {
