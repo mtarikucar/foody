@@ -28,7 +28,17 @@ jobs:
     - name: Build Admin
       run: |
         CI=false npm run build --prefix ./admin
+      env:
+        REACT_APP_BASE_API_URL: ${{ secrets.REACT_APP_BASE_API_URL }}
+    
+    # Build the client project
+    - name: Build Client
+      run: |
         CI=false npm run build --prefix ./client
+    
+    # Build the landing project
+    - name: Export Landing
+      run: |
         CI=false npm run export --prefix ./landing
 
     # Deploy all projects
@@ -41,7 +51,7 @@ jobs:
         port: 22
         rm: true # This option will remove the files before transferring new ones
         source: "./landing/out/,./admin/build/,./client/build/"
-        target: "/var/www/foody"
+        target: "/var/www/foody/main,/var/www/foody/admin,/var/www/foody/client"
 
     # Restart Nginx
     - name: Restart Nginx
