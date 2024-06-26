@@ -19,7 +19,7 @@ const Index = ({ qrValue, tableNumber, restaurantName }) => {
         });
     };
 
-    const url =`http://branch.philofoody.com/` + auth.branchId;
+    const url =`https://branch.philofoody.com/` + auth.branchId;
     return (
         <>
             <div  className="flex justify-center items-center rounded-2xl shadow-2xl">
