@@ -1,0 +1,64 @@
+name: Deploy Foody Projects
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    # Setup Node.js
+    - name: Setup Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '18'
+      
+    - name: Install Dependencies
+      run: |
+        npm install --prefix ./admin
+        npm install --prefix ./client
+        npm install --prefix ./landing
+
+    # Build the admin project
+    - name: Build Admin
+      run: |
+        CI=false npm run build --prefix ./admin
+      env:
+        REACT_APP_BASE_API_URL: ${{ secrets.REACT_APP_BASE_API_URL }}
+    
+    # Build the client project
+    - name: Build Client
+      run: |
+        CI=false npm run build --prefix ./client
+    
+    # Build the landing project
+    - name: Export Landing
+      run: |
+        CI=false npm run export --prefix ./landing
+
+    # Deploy all projects
+    - name: Deploy Projects
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ secrets.SERVER_IP }}
+        username: ${{ secrets.SSH_USERNAME }}
+        password: ${{ secrets.SSH_PASSWORD }}
+        port: 22
+        rm: true # This option will remove the files before transferring new ones
+        source: "./landing/out/,./admin/build/,./client/build/"
+        target: "/var/www/foody/main,/var/www/foody/admin,/var/www/foody/client"
+
+    # Restart Nginx
+    - name: Restart Nginx
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SERVER_IP }}
+        username: ${{ secrets.SSH_USERNAME }}
+        password: ${{ secrets.SSH_PASSWORD }}
+        port: 22
+        script: sudo systemctl restart nginx
