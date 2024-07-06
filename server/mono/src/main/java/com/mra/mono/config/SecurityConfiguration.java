@@ -80,7 +80,7 @@ public class SecurityConfiguration {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.setAllowedOrigins(Arrays.asList("http://localhost:3000","http://localhost:3001","http://localhost:5173","https://management.philofoody.com","https://branch.philofoody.com"));
+        config.setAllowedOrigins(Arrays.asList("http://localhost:3000","http://localhost:3001","http://localhost:5173","https://management.philofoody.com","https://api.philofoody.com","https://branch.philofoody.com"));
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-Requested-With", "Accept"));
         config.setMaxAge(3600L);

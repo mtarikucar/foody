@@ -14,7 +14,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws")
-                .setAllowedOrigins("http://localhost:3000","http://localhost:3001","http://localhost:5173","https://management.philofoody.com","https://branch.philofoody.com") // React uygulamasının URL'sini buraya ekleyin
+                .setAllowedOrigins("http://localhost:3000","http://localhost:3001","http://localhost:5173","https://management.philofoody.com","https://branch.philofoody.com","https://api.philofoody.com") // React uygulamasının URL'sini buraya ekleyin
                 .addInterceptors(new HttpSessionHandshakeInterceptor()) // HttpSessionHandshakeInterceptor ekleyerek HttpSession'ı kullanarak oturum yönetimini etkinleştirin
                 .withSockJS();
     }
