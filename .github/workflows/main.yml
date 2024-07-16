@@ -51,7 +51,7 @@ jobs:
     # Build Java Spring Boot project
     - name: Build Java Spring Boot Project
       run: |
-        cd foody/server/mono/
+        cd ./server/mono/
         mvn clean install
     
     # Deploy all projects
@@ -63,7 +63,7 @@ jobs:
         password: ${{ secrets.SSH_PASSWORD }}
         port: 22
         rm: true # This option will remove the files before transferring new ones
-        source: "./landing/out/,./admin/build/,./client/build/,./foody/server/mono/target/mono-0.0.1-SNAPSHOT.jar"
+        source: "./landing/out/,./admin/build/,./client/build/,./server/mono/target/mono-0.0.1-SNAPSHOT.jar"
         target: "/var/www/foody"
 
     # Restart Nginx
