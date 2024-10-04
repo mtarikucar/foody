@@ -44,7 +44,7 @@ export default function SignUpPage() {
     });
 
     return (
-        <div className="mb-16 flex h-full w-full items-center justify-center px-2 h-dvh">
+        <div className="mb-16 flex w-full items-center justify-center px-2 h-dvh">
             <div className="mt-[10vh] w-full flex-col items-center max-w-[420px] bg-white p-4 shadow-lg rounded-lg">
                 <h4 className="mb-4 text-2xl font-bold text-center text-navy-700 dark:text-white">
                     Kayıt Ol

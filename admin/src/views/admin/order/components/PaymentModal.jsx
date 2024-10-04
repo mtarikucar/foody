@@ -35,7 +35,7 @@ const PaymentModal = ({isOpen, onClose, tableId}) => {
         });
 
         useEffect(() => {
-            queryClient.invalidateQueries("additionOrder");
+            queryClient.invalidateQueries(['additionOrder']);
             if (orders) {
                 const total = orders.reduce((acc, order) => acc + order.totalAmount, 0);
                 const paymentTotal = paymentHistory.reduce((acc, payment) => acc + payment.amount, 0);
@@ -72,6 +72,7 @@ const PaymentModal = ({isOpen, onClose, tableId}) => {
                 setEnteredAmount('');
                 onClose();
                 queryClient.invalidateQueries(['additionOrder']);
+                queryClient.invalidateQueries(['tableOrder']);
             } catch (error) {
                 console.error('Payment submission failed:', error);
                 toast('Payment failed');
@@ -159,62 +160,66 @@ const PaymentModal = ({isOpen, onClose, tableId}) => {
 
 
         return (
-            <Modal isOpen={isOpen} onClose={() => closePaymentModal()} size={"extraLarge"} title={"Order Operations"}
-                   className="rounded-lg shadow-lg relative">
+            <Modal
+                isOpen={isOpen}
+                onClose={() => closePaymentModal()}
+                size={"extraLarge"}
+                title={"Order Operations"}
+                className="rounded-lg shadow-lg relative"
+            >
                 <div className="container mx-auto px-4 py-6">
                     <div className="flex flex-wrap -mx-3">
-                        {/* Left panel for item list and actions */}
+                        {/* Left panel for order list */}
                         <div className="w-full lg:w-1/3 px-3 mb-6 lg:mb-0">
                             <div className="p-6 border rounded-lg shadow-md bg-white">
-                                <div className="mb-6">
-                                    <h3 className="text-lg font-semibold mb-3">PARÇALI ÖDE</h3>
-                                    {orders && orders.length > 0 ? (
-                                        <div className="divide-y divide-gray-200">
-                                            {orders.map((order, index) => (
-                                                <div key={index} className="py-4">
-                                                    <div className="cursor-pointer"
-                                                         onClick={() => setOpenIndex(openIndex === index ? null : index)}>
-                                                        <h3 className="text-lg font-semibold">{order.createTime}</h3>
-                                                        <div className="text-sm text-gray-600">toplam tutar:
-                                                            {order.totalAmount}₺
-                                                        </div>
-                                                        <div
-                                                            className="text-sm text-gray-600">Durum: {order.status === 1 ? 'Aktif' : 'Pasif'}</div>
+                                <h3 className="text-lg font-semibold mb-4">Parçalı Öde</h3>
+                                {orders && orders.length > 0 ? (
+                                    <div className="divide-y divide-gray-200">
+                                        {orders.map((order, index) => (
+                                            <div key={index} className="py-4">
+                                                <div
+                                                    className="cursor-pointer"
+                                                    onClick={() => setOpenIndex(openIndex === index ? null : index)}
+                                                >
+                                                    <h3 className="text-lg font-semibold">
+                                                        {new Date(order.createTime).toLocaleDateString()}
+                                                    </h3>
+                                                    <div className="text-sm text-gray-600">
+                                                        Toplam Tutar: {order.totalAmount}₺
                                                     </div>
-                                                    {openIndex === index && (
-                                                        <div className="mt-4">
-                                                            <span className="font-medium">Sipariş Detayı:</span>
-                                                            <ul className="list-disc pl-5">
-                                                                {order.orderDetails.map((detail, detailIndex) => (
-                                                                    <li key={detailIndex}>
-                                                                        {detail.product.name} (Adet: {detail.quantity})
-                                                                    </li>
-                                                                ))}
-                                                            </ul>
-                                                        </div>
-                                                    )}
+                                                    <div className="text-sm text-gray-600">
+                                                        Durum: {order.status === 1 ? 'Aktif' : 'Pasif'}
+                                                    </div>
                                                 </div>
-                                            ))}
-                                        </div>
-                                    ) : (
-                                        <div className="text-center text-gray-500">No orders available.</div>
-                                    )}
-
-                                </div>
+                                                {openIndex === index && (
+                                                    <div className="mt-4">
+                                                        <span className="font-medium">Sipariş Detayı:</span>
+                                                        <ul className="list-disc pl-5">
+                                                            {order.orderDetails.map((detail, detailIndex) => (
+                                                                <li key={detailIndex}>
+                                                                    {detail.product.name} (Adet: {detail.quantity})
+                                                                </li>
+                                                            ))}
+                                                        </ul>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <div className="text-center text-gray-500">Sipariş bulunmamaktadır.</div>
+                                )}
                             </div>
                         </div>
 
-                        {/* Center panel for numeric keypad and payment calculation */}
+                        {/* Center panel for numeric keypad */}
                         <div className="w-full lg:w-1/3 px-3 mb-6 lg:mb-0">
                             <div className="p-6 border rounded-lg shadow-md bg-white">
-                                <div className="mb-4">
-                                    <h3 className="text-lg font-semibold mb-3">Ödeme Tutarı</h3>
-                                    <div className="flex items-center justify-center bg-gray-100 p-4 rounded-lg">
-                                    <span
-                                        className="text-2xl font-medium">₺{enteredAmount !== '' ? enteredAmount : totalCost}</span>
-                                    </div>
+                                <h3 className="text-lg font-semibold mb-4">Ödeme Tutarı</h3>
+                                <div className="flex items-center justify-center bg-gray-100 p-4 rounded-lg mb-4">
+                                    <span className="text-2xl font-medium">₺{enteredAmount !== '' ? enteredAmount : totalCost}</span>
                                 </div>
-                                <div className="grid grid-cols-3 gap-3 mb-4">
+                                <div className="grid grid-cols-3 gap-3">
                                     {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((number) => (
                                         <button
                                             key={number}
@@ -226,82 +231,95 @@ const PaymentModal = ({isOpen, onClose, tableId}) => {
                                     ))}
                                     <button
                                         className="py-3 px-4 col-span-2 bg-gray-200 rounded-lg text-xl font-medium hover:bg-gray-300 transition duration-300"
-                                        onClick={() => handleNumberClick(0)}>
+                                        onClick={() => handleNumberClick(0)}
+                                    >
                                         0
                                     </button>
                                     <button
                                         className="py-3 px-4 bg-gray-200 rounded-lg text-xl font-medium hover:bg-gray-300 transition duration-300"
-                                        onClick={() => handleDeleteClick()}>
+                                        onClick={() => handleDeleteClick()}
+                                    >
                                         ⌫
                                     </button>
                                 </div>
                             </div>
                         </div>
 
+                        {/* Right panel for payment options and history */}
                         <div className="w-full lg:w-1/3 px-3">
                             <div className="p-6 border rounded-lg shadow-md bg-white">
                                 <div className="mb-5">
-                                    <h3 className="text-lg font-semibold">TOPLAM</h3>
+                                    <h3 className="text-lg font-semibold">Toplam</h3>
                                     <div className="flex justify-between text-lg mb-4">
                                         <span>Ödenecek Tutar:</span>
                                         <span className="font-semibold">₺{totalCost}</span>
                                     </div>
                                 </div>
-                                <div className="w-full  px-3 mb-6 lg:mb-0">
-                                    <div className="  mb-4 w-full">
-                                        <div onClick={() => addPayment('cash')}
-                                             className="flex justify-center items-center hover:opacity-50 ease-in-out duration-300 cursor-pointer mb-2 w-full bg-green-700 text-white p-4 rounded">
-                                        <span>
-                                            <IoCashOutline className={"mr-2"}/>
-                                        </span>
-                                            Nakit
-
-                                        </div>
-                                        <div onClick={() => addPayment('card')}
-                                             className="flex justify-center items-center hover:opacity-50 ease-in-out duration-300 cursor-pointer mb-2 w-full bg-blue-500 text-white p-4 rounded">
-                                        <span>
-                                            <IoCardOutline className={"mr-2"}/>
-                                        </span>
-                                            Kart
-                                        </div>
-                                        <div onClick={() => addPayment('other')}
-                                             className="flex justify-center items-center hover:opacity-50 ease-in-out duration-300 cursor-pointer mb-2 w-full  border border-opacity-50 p-4 rounded">
-                                            Diğer
-                                        </div>
+                                <div className="mb-6">
+                                    <div
+                                        onClick={() => addPayment('cash')}
+                                        className="flex justify-center items-center w-full bg-green-700 text-white p-4 rounded-lg hover:opacity-90 transition duration-300 mb-2 cursor-pointer"
+                                    >
+                                        <IoCashOutline className="mr-2" />
+                                        Nakit
+                                    </div>
+                                    <div
+                                        onClick={() => addPayment('card')}
+                                        className="flex justify-center items-center w-full bg-blue-500 text-white p-4 rounded-lg hover:opacity-90 transition duration-300 mb-2 cursor-pointer"
+                                    >
+                                        <IoCardOutline className="mr-2" />
+                                        Kart
+                                    </div>
+                                    <div
+                                        onClick={() => addPayment('other')}
+                                        className="flex justify-center items-center w-full border border-gray-300 p-4 rounded-lg hover:opacity-90 transition duration-300 cursor-pointer"
+                                    >
+                                        Diğer
                                     </div>
                                 </div>
-                                <div className="w-full ">
+                                <div className="w-full">
                                     {paymentHistory.map((payment, index) => (
-                                        <div className={"flex justify-center items-center w-full"} key={index}>
-                                            <span className={"cursor-pointer"}
-                                                  onClick={() => changePayment(payment.type, "reduce")}>-</span>
-                                            <div key={index} className="flex items-center justify-center m-3 ">
-                                                {payment.type === "cash" ? "nakit" : (payment.type === "card" ? "kart" : "diğer")}: <span
-                                                className={"text-xl font-semibold"}>{payment.amount} TL</span>
+                                        <div className="flex justify-between items-center mb-4" key={index}>
+                                            <div className="flex items-center">
+                                    <span
+                                        className="cursor-pointer text-red-500 mr-3"
+                                        onClick={() => changePayment(payment.type, "reduce")}
+                                    >
+                                        -
+                                    </span>
+                                                <div>
+                                                    {payment.type === "cash" ? "Nakit" : payment.type === "card" ? "Kart" : "Diğer"}:{" "}
+                                                    <span className="font-semibold">₺{payment.amount}</span>
+                                                </div>
+                                                <span
+                                                    className="cursor-pointer text-green-500 ml-3"
+                                                    onClick={() => changePayment(payment.type, "increase")}
+                                                >
+                                        +
+                                    </span>
                                             </div>
-                                            <span className={"cursor-pointer"}
-                                                  onClick={() => changePayment(payment.type, "increase")}>+</span>
-                                            <span className={"items-end justify-end cursor-pointer"}
-                                                  onClick={() => changePayment(payment.type, "delete")}>x</span>
+                                            <span
+                                                className="cursor-pointer text-red-500"
+                                                onClick={() => changePayment(payment.type, "delete")}
+                                            >
+                                    x
+                                </span>
                                         </div>
                                     ))}
                                 </div>
                                 <button
-                                    className={"flex justify-center items-center hover:opacity-50 ease-in-out duration-300 cursor-pointer mb-2 w-full  border border-opacity-50 p-4 rounded"}
-                                    onClick={() => submitPayment()} disabled={totalCost !== 0}>
-
-                                    Ödemeyi tamamla
-
+                                    className="w-full bg-indigo-600 text-white p-4 rounded-lg hover:bg-indigo-700 transition duration-300 disabled:opacity-50 cursor-pointer"
+                                    onClick={() => submitPayment()}
+                                    disabled={totalCost !== 0}
+                                >
+                                    Ödemeyi Tamamla
                                 </button>
-                            </div>
-                            <div>
-
                             </div>
                         </div>
                     </div>
-
                 </div>
             </Modal>
+
         );
     }
 ;
