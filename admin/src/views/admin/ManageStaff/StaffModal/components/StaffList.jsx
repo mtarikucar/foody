@@ -30,7 +30,7 @@ const StaffList = () => {
 
     return (
         <div className="staff-list h-dvh bg-white shadow rounded-lg p-4">
-            {/* Table */}
+            <div className={"flex justify-center items-center p-2 "}> Çalışanlar </div>
             <div className="w-full overflow-x-auto px-4">
                 <table {...getTableProps()} className="w-full min-w-[500px]">
                     <thead>

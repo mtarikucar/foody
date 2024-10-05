@@ -85,7 +85,7 @@ const routes = [
     secondary: true,
   },
   {
-    name: "urunler",
+    name: "Ürünler",
     layout: "/admin",
     path: "products",
     icon: <ArchiveBox className="h-6 w-6" />,
