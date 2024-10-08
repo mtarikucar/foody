@@ -33,6 +33,7 @@ import SignUp from "./views/auth/SignUp";
 import ForgotPassword from "./views/auth/ForgotPassword";
 import ManageStaff from "./views/admin/ManageStaff";
 import OrderTable from "./views/admin/orderTable";
+import Dashboard from "./views/admin/reports/additionReport";
 
 const routes = [
   {
@@ -192,7 +193,17 @@ const routes = [
     component: <SelectBranch />,
     allowedRoles : ["ADMIN","STAFF"],
     isShow: false
-  }
+  },
+
+  {
+    name: "Raporlar",
+    layout: "/admin",
+    path: "report",
+    icon: <MdMoney className="h-6 w-6" />,
+    component: <Dashboard />,
+    allowedRoles : ["ADMIN"],
+    isShow: true
+  },
 
 ];
 export default routes;

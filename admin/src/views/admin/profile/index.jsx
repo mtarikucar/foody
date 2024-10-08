@@ -28,9 +28,9 @@ const ProfileOverview = () => {
                 <div className={`${auth.package ? "col-span-12" : "col-span-8"} lg:!mb-0`}>
                     <Banner company={company}/>
                 </div>
-                <div className="col-span-4 lg:!mb-0">
+              {/*  <div className="col-span-4 lg:!mb-0">
                     <Package/>
-                </div>
+                </div>*/}
 
 
             </div>

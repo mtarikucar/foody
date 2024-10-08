@@ -8,6 +8,7 @@ import React, {useState} from "react";
 import AddStaffForm from "./StaffModal/components/AddStaffForm";
 import StaffList from "./StaffModal/components/StaffList";
 import useAuth from "../../../hooks/useAuth";
+import Spinner from "../../../components/Spinner/Spinner";
 
 const SuccessMessage = ({resetForm}) => (
     <div className="max-w-md mx-auto mt-10 p-6 bg-green-100 border border-green-300 rounded-lg shadow">
@@ -42,7 +43,7 @@ const ManageStaff = () => {
         setOpenForm(false);
     };
 
-    if (isLoading) return <div>Loading...</div>;
+    if (isLoading) return <Spinner loading={true} size={60} />;
     if (error) return <div>An error occurred</div>;
     return (
 

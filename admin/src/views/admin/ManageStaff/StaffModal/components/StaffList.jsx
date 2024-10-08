@@ -3,6 +3,7 @@ import { useTable, useSortBy, usePagination } from "react-table";
 import { useQuery } from 'react-query';
 import useAxiosPrivate from "../../../../../hooks/useAxiosPrivate";
 import useAuth from "../../../../../hooks/useAuth";
+import Spinner from "../../../../../components/Spinner/Spinner";
 
 const StaffList = () => {
     const axiosPrivate = useAxiosPrivate();
@@ -25,7 +26,7 @@ const StaffList = () => {
 
     const { getTableProps, getTableBodyProps, headerGroups, page, prepareRow } = tableInstance;
 
-    if (isLoading) return <div>Loading...</div>;
+    if (isLoading) return <Spinner loading={true} size={60} />;
     if (isError) return <div>Error: {error.message}</div>;
 
     return (

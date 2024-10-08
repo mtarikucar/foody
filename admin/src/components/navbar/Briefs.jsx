@@ -65,7 +65,7 @@ const Breifs = () => {
                         </div>
                     }
                     <div className={"col-span-6 h-full"}>
-                        <Package/>
+                       {/* <Package/>*/}
                     </div>
                 </div>
             }

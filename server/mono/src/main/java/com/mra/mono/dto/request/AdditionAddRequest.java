@@ -20,5 +20,6 @@ public class AdditionAddRequest implements Serializable {
     private Double cash;
     private Double card;
     private Double other;
+    private UUID branchId;
     private List<UUID> orderIds;
 }

@@ -83,14 +83,13 @@ public class OrderService {
             throw e;
         }
     }
-
-    public Order changeOrderStatus(UUID orderId, Integer status) {
+    @Transactional
+    public void changeOrderStatus(UUID orderId, Integer status) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("Order not found with id: " + orderId));
         order.setStatus(status);
         Order savedOrder = orderRepository.save(order);
         messagingTemplate.convertAndSend("/topic/order/" + order.getBranchId() + "/" + order.getTableId(), savedOrder);
-        return savedOrder;
     }
 
     public Optional<Order> getOrderById(UUID orderId) {

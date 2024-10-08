@@ -3,6 +3,7 @@ package com.mra.mono.service;
 import com.mra.mono.dto.entity.*;
 import com.mra.mono.dto.request.AdditionAddRequest;
 import com.mra.mono.repository.AdditionRepository;
+import com.mra.mono.repository.BranchRepository;
 import jakarta.annotation.Resource;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -10,6 +11,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -22,6 +28,9 @@ public class AdditionService {
     private final AdditionRepository additionRepository;
     @Resource
     private final SimpMessagingTemplate messagingTemplate;
+
+    @Resource
+    private BranchRepository branchRepository;
 
 
     @Transactional

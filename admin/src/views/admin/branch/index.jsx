@@ -9,6 +9,7 @@ import CodeModal from "./components/CodeModal";
 import banner from "../../../assets/img/profile/banner.png";
 import {Button} from "@chakra-ui/button";
 import {FaExchangeAlt, FaPlus} from "react-icons/fa";
+import Spinner from "../../../components/Spinner/Spinner";
 
 const Branch = () => {
     const axiosPrivate = useAxiosPrivate();
@@ -23,7 +24,7 @@ const Branch = () => {
         return response.data.data;
     });
 
-    if (isLoading) return <div>Loading...</div>;
+    if (isLoading) return <div><Spinner loading={true} size={60} /></div>;
     if (error) return <div>An error occurred</div>;
 
     return (
