@@ -41,10 +41,20 @@ const Breifs = () => {
 
 
     const [requirementComplate, isRender] = useState(false);
-    const {data: branch, isLoading, error} = useQuery('branch', async () => {
-        const response = await axiosPrivate.get(`/branch/${auth.branchId}`);
-        return response.data.data;
-    });
+
+    const { data: branch, isLoading, error } = useQuery(
+        ['branch'],
+        async () => {
+            const response = await axiosPrivate.get(`/branch/${auth.branchId}`);
+            return response.data.data;
+        },
+        {
+            enabled: !!auth.branchId, // Query runs only if auth.branchId exists
+        }
+    );
+
+    console.log("branch", branch);
+    console.log("auth", auth);
     useEffect(() => {
         queryClient.invalidateQueries("notification");
     }, [receivedData]);
@@ -57,7 +67,7 @@ const Breifs = () => {
                 </p>
             }
             children={
-                <div className="flex w-[280px] flex-col gap-3 rounded-[20px] bg-white p-4 shadow-xl shadow-shadow-500 dark:!bg-navy-700 dark:text-white dark:shadow-none sm:w-[460px] max-h-[50vh] overflow-y-scroll sm:absolute sm:left-0 sm:translate-x-0 translate-x-[-100%]">
+                <div className="flex w-[280px] flex-col gap-3 rounded-[20px] bg-white p-4 shadow-xl shadow-shadow-500 dark:!bg-navy-700 dark:text-white dark:shadow-none sm:w-[460px] max-h-[50vh]  sm:absolute sm:left-0 sm:translate-x-0 translate-x-[-100%]">
                     {(!requirementComplate && branch) &&
 
                         <div className={" col-span-6 "}>
@@ -65,7 +75,7 @@ const Breifs = () => {
                         </div>
                     }
                     <div className={"col-span-6 h-full"}>
-                        <Package/>
+                       {/* <Package/>*/}
                     </div>
                 </div>
             }

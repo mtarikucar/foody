@@ -30,7 +30,7 @@ public class OtpController extends BaseController {
     public ResponseEntity<Message<String>> sendOtp(@RequestParam String email) {
 
         String otp = otpService.generateOtp(email);
-        String resetUrl = "http://localhost:3000/auth/forgot-password/" + otp;
+        String resetUrl = "https://management.philofoody.com/auth/forgot-password/" + otp;
 
 
         String htmlContent = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\"\n" +

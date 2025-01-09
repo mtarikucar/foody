@@ -41,15 +41,22 @@ public class UserController extends BaseController {
     ;
 
     @GetMapping
-    public ResponseEntity<Message<List<Users>>> getUsers(@RequestParam UUID companyId) {
+    public ResponseEntity<Message<List<Users>>> getUsers(@RequestParam UUID companyId,
+                                                         @RequestParam(required = false) UUID branchId) {
         try {
-            List<Users> user = service.getUserByCompanyId(companyId);
-            return buildSuccessReturnEntity(user);
+            List<Users> users;
+            if (branchId != null) {
+                users = service.getUserByCompanyAndBranchId(companyId, branchId);
+            } else {
+                users = service.getUserByCompanyId(companyId);
+            }
+            return buildSuccessReturnEntity(users);
         } catch (Exception e) {
-            log.error("Error while fetching user", e);
-            return buildFailureReturnEntity("Error fetching user: " + e.getMessage());
+            log.error("Error while fetching users", e);
+            return buildFailureReturnEntity("Error fetching users: " + e.getMessage());
         }
     }
+
 
     @PutMapping
     public ResponseEntity<Message<String>> changePassword(

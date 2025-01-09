@@ -28,7 +28,7 @@ export default function Auth() {
               <Route path="/" element={<Navigate to="/auth/sign-in" replace />} />
             </Routes>
           </div>
-          <Footer />
+       {/*   <Footer />*/}
         </main>
       </div>
   );

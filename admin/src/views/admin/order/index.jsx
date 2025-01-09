@@ -67,24 +67,27 @@ const Order = () => {
     return (
         <>
             <div className="mt-3 flex flex-col justify-center items-center w-full gap-5">
-                <div className="h-fit w-full bg-white rounded-md drop-shadow-lg flex flex-col justify-center items-center gap-5">
+                <div className="h-dvh w-full bg-white rounded-md drop-shadow-lg flex flex-col justify-center items-center gap-5">
                     <div className="text-2xl font-bold text-navy-700 dark:text-white mt-2">
-                        {selectedRegion ? `Seçili Bölge: ${regions.find(region => region.regionId === selectedRegion)?.regionName}` : "Bütün Masalar"}
+                        {selectedRegion ? `Seçili Bölge: ${regions?.find(region => region.regionId === selectedRegion)?.regionName}` : "Bütün Masalar"}
                     </div>
-                    <div className="flex w-full overflow-auto mx-3 px-4">
+                    <div
+                        className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-12 w-full mx-3 px-4">
                         {regions && regions.map(region => (
                             <div
                                 key={region.regionId}
-                                className={`bg-gray-50 mt-2 h-16 flex justify-center items-center text-xl w-32 px-3 py-2 border rounded-md cursor-pointer hover:bg-indigo-500 hover:text-white ease-in-out duration-300 uppercase m-2 ${selectedRegion === region.regionId ? "bg-indigo-700 text-white" : "text-gray-900"}`}
+                                className={`bg-gray-50 mt-2 h-16 flex justify-center items-center text-xl w-full sm:w-32 px-3 py-2 border rounded-md cursor-pointer hover:bg-indigo-500 hover:text-white ease-in-out duration-300 uppercase m-2 ${selectedRegion === region.regionId ? "bg-indigo-700 text-white" : "text-gray-900"}`}
                                 onClick={() => setSelectedRegion(selectedRegion === region.regionId ? null : region.regionId)}
                             >
                                 {region.regionName}
                             </div>
                         ))}
                     </div>
-                    <div className="w-full h-full bg-white rounded-md drop-shadow-lg flex flex-col items-center  overflow-auto">
+                    <div
+                        className="w-full  h-full bg-white rounded-md drop-shadow-lg flex flex-col items-center  overflow-auto">
                         {selectedRegion && tables ? (
-                            <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-5 xl:grid-cols-10 w-full p-2.5">
+                            <div
+                                className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-5 xl:grid-cols-10 w-full p-2.5">
                                 {groupedTables[selectedRegion]?.map(table => (
                                     <NavLink
                                         to={`/admin/order/${table.tableId}`}

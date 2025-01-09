@@ -23,7 +23,7 @@ const Products = () => {
     });
 
     return (
-        <div className="mt-3 grid h-dvh grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="mt-3 grid h-dvh grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             <div className={"sticky col-span-2 lg:col-span-1"}>
                 <Card extra={"rounded-md border border-gray-200 bg-white p-6 shadow-lg h-dvh overflow-y-scroll"}>
                     <div className={"flex justify-between items-center"}>
@@ -63,7 +63,7 @@ const Products = () => {
                     </div>
                 </Card>
             </div>
-            <div className={"col-span-2 max-h-dvh overflow-y-scroll"}>
+            <div className={"col-span-2 max-h-dvh lg:overflow-y-scroll"}>
                 <button
                     className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 mb-4`}
                     onClick={() => setAddProduct(!addProduct)}

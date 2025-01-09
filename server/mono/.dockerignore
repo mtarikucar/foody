@@ -1,8 +1,26 @@
-# Ignore all files in the root directory
-*
-# Include the src directory
-!src/
-# Include the pom.xml file
-!pom.xml
-# Exclude the target directory and its contents
+# ---- Java / Maven / IDE ----
+
+# Maven'in derleme çıktıları
 target/
+**/target/
+
+# IDE klasörleri (Eclipse, IntelliJ, VSCode vs.)
+.project
+.classpath
+.settings/
+.idea/
+*.iml
+.vscode/
+
+# Log dosyaları / klasörleri
+*.log
+logs/
+log/
+out/
+
+# OS veya geçici dosyalar
+*.swp
+*.swo
+*.tmp
+.DS_Store
+Thumbs.db

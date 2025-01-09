@@ -4,12 +4,15 @@ import { Stomp } from '@stomp/stompjs';
 
 const WebSocketContext = createContext(null);
 
+//const BASE_URL ="http://localhost:8080/api/menu/v1";
+const BASE_URL = 'https://api.philofoody.com/api/menu/v1';
+
 export const WebSocketProvider = ({ children }) => {
     const [webSocket, setWebSocket] = useState(null);
 
     useEffect(() => {
         const connectWebSocket = () => {
-            const socket = new SockJS("https://api.philofoody.com/api/menu/v1" + '/ws');
+            const socket = new SockJS(BASE_URL + '/ws');
             const stompClient = Stomp.over(socket);
 
             const connectCallback = () => {

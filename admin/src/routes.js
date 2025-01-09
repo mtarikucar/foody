@@ -33,9 +33,10 @@ import SignUp from "./views/auth/SignUp";
 import ForgotPassword from "./views/auth/ForgotPassword";
 import ManageStaff from "./views/admin/ManageStaff";
 import OrderTable from "./views/admin/orderTable";
+import Dashboard from "./views/admin/reports/additionReport";
 
 const routes = [
-  {
+ /* {
     name: "Paneller",
     layout: "/admin",
     path: "default",
@@ -43,7 +44,7 @@ const routes = [
     component: <MainDashboard />,
     allowedRoles : ["ADMIN"],
     isShow: true
-  },
+  },*/
   {
     name: "Şube",
     layout: "/admin",
@@ -85,7 +86,7 @@ const routes = [
     secondary: true,
   },
   {
-    name: "urunler",
+    name: "Ürünler",
     layout: "/admin",
     path: "products",
     icon: <ArchiveBox className="h-6 w-6" />,
@@ -192,7 +193,17 @@ const routes = [
     component: <SelectBranch />,
     allowedRoles : ["ADMIN","STAFF"],
     isShow: false
-  }
+  },
+
+  {
+    name: "Raporlar",
+    layout: "/admin",
+    path: "report",
+    icon: <MdMoney className="h-6 w-6" />,
+    component: <Dashboard />,
+    allowedRoles : ["ADMIN"],
+    isShow: true
+  },
 
 ];
 export default routes;

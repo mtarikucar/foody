@@ -2,12 +2,14 @@ package com.mra.mono.controller;
 
 import com.mra.mono.common.controller.BaseController;
 import com.mra.mono.dto.entity.Addition;
+import com.mra.mono.dto.entity.Branch;
 import com.mra.mono.dto.entity.Order;
 import com.mra.mono.dto.entity.message.Message;
 import com.mra.mono.dto.request.AdditionAddRequest;
 import com.mra.mono.dto.request.CreateOrderReq;
 import com.mra.mono.dto.response.OrderRes;
 import com.mra.mono.service.AdditionService;
+import com.mra.mono.service.BranchService;
 import com.mra.mono.service.OrderService;
 import jakarta.annotation.Resource;
 import lombok.AllArgsConstructor;
@@ -18,6 +20,8 @@ import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,6 +33,9 @@ public class AdditionController  extends BaseController {
 
     @Resource
     private final AdditionService additionService;
+
+    @Resource
+    private final BranchService branchService;
 
 
     @MessageMapping("/addition/{branchId}/{tableId}")

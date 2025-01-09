@@ -103,4 +103,8 @@ public class UserService {
             throw e;
         }
     }
+
+    public List<Users> getUserByCompanyAndBranchId(UUID companyId, UUID branchId) {
+        return userRepository.findAllByCompanyIdAndBranchId(companyId,branchId);
+    }
 }

@@ -11,6 +11,7 @@ import {Button} from "@chakra-ui/button";
 import DeleteProduct from "./DeleteProduct";
 import DeleteProductFromMenu from "../../menus/components/DeleteProductFromMenu";
 import {BsPlusSquare, BsXSquare, BsCheckCircle} from "react-icons/bs";
+import {Spinner} from "@chakra-ui/spinner";
 
 const UpdateProductSchema = Yup.object().shape({
     name: Yup.string().required('Required'),
@@ -123,11 +124,11 @@ function UpdateProduct({isOpen, onClose, productData, menuId}) {
     };
 
     const handleRemoveImages = (imageToRemove) => {
-        setImageUrls(imageUrls.filter(image => image !== imageToRemove));
+        setImageUrls((prevImages) => prevImages.filter(image => image !== imageToRemove));
     };
 
     const handleRemoveImage = (indexToRemove) => {
-        setFileData(fileData.filter((_, index) => index !== indexToRemove));
+        setFileData((prevFiles) => prevFiles.filter((_, index) => index !== indexToRemove));
     };
 
     const handleDelete = (id) => {
@@ -186,7 +187,7 @@ function UpdateProduct({isOpen, onClose, productData, menuId}) {
                         onSubmit={handleSubmit}
                         enableReinitialize // Mevcut ürün bilgileri ile formu yeniden başlat
                     >
-                        {({errors, touched}) => (
+                        {({errors, touched,isSubmitting}) => (
                             <Form className='space-y-4'>
                                 <Field name="name" placeholder="Ad"
                                        className='bg-gray-50 col-span-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5'/>
@@ -230,10 +231,21 @@ function UpdateProduct({isOpen, onClose, productData, menuId}) {
                                 </div>
 
                                 <div className={"flex justify-between gap-6"}>
-                                    <button type="submit"
-                                            className='w-full p-2 bg-indigo-700 hover:-translate-y-1 ease-in-out duration-200 text-white rounded-md'>
-                                        Kaydet
+                                    <button
+                                        type="submit"
+                                        disabled={isSubmitting}  // Form gönderiliyorsa buton disabled olur
+                                        className={`w-full p-2 bg-indigo-700 text-white rounded-md 
+                                    ${isSubmitting ? 'opacity-50 cursor-not-allowed' : 'hover:-translate-y-1 ease-in-out duration-200'}`}
+                                    >
+                                        {isSubmitting ? (
+                                            <div className="flex justify-center items-center">
+                                                <Spinner size="sm" className="mr-2"/> Kaydediliyor...
+                                            </div>
+                                        ) : (
+                                            "Kaydet"
+                                        )}
                                     </button>
+
                                     <Button
                                         onClick={() => handleDelete(productData.productId)}
                                         className="w-full p-2 bg-red-600 hover:-translate-y-1 ease-in-out duration-200 text-white rounded-md">
@@ -246,11 +258,11 @@ function UpdateProduct({isOpen, onClose, productData, menuId}) {
 
                     <div className={" "}>
                         <div className='grid grid-cols-4 p-1 gap-1 border-2 rounded-md'>
-                            {productData?.images?.map((image, index) => (
+                            {imageUrls.map((image, index) => (
                                 <div
                                     key={index}
                                     className="relative"
-                                    onMouseEnter={() => setHoveredImage(index)}
+                                    onMouseEnter={() => setHoveredImage(`image_${index}`)}
                                     onMouseLeave={() => setHoveredImage(null)}
                                 >
                                     <img
@@ -258,12 +270,12 @@ function UpdateProduct({isOpen, onClose, productData, menuId}) {
                                         alt="Product"
                                         className='w-20 h-20 border-2 object-cover rounded-md'
                                     />
-                                    {hoveredImage === index && (
+                                    {hoveredImage === `image_${index}` && (
                                         <button
                                             onClick={() => handleRemoveImages(image)}
                                             className="absolute top-0 bg-red-500 text-white px-2 rounded-full"
                                         >
-                                            &#10005; {/* Bu, bir çarpı işaretidir */}
+                                            &#10005;
                                         </button>
                                     )}
                                 </div>
@@ -273,7 +285,7 @@ function UpdateProduct({isOpen, onClose, productData, menuId}) {
                                 <div
                                     key={index}
                                     className="relative"
-                                    onMouseEnter={() => setHoveredImage(index)}
+                                    onMouseEnter={() => setHoveredImage(`file_${index}`)}
                                     onMouseLeave={() => setHoveredImage(null)}
                                 >
                                     <img
@@ -281,12 +293,12 @@ function UpdateProduct({isOpen, onClose, productData, menuId}) {
                                         alt="Product"
                                         className='w-20 h-20 border-2 object-cover rounded-md'
                                     />
-                                    {hoveredImage === index && (
+                                    {hoveredImage === `file_${index}` && (
                                         <button
                                             onClick={() => handleRemoveImage(index)}
                                             className="absolute top-0 bg-red-500 text-white px-2 rounded-full"
                                         >
-                                            &#10005; {/* Bu, bir çarpı işaretidir */}
+                                            &#10005;
                                         </button>
                                     )}
                                 </div>

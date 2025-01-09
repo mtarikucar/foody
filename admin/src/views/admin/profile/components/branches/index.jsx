@@ -6,6 +6,7 @@ import AddBranchBanner from "../../../../../components/AddBranchBanner";
 import React, { useMemo } from "react";
 import { useTable, useSortBy, usePagination } from "react-table";
 import { FaArrowRight } from 'react-icons/fa';
+import Spinner from "../../../../../components/Spinner/Spinner";
 
 const Branches = () => {
     const axiosPrivate = useAxiosPrivate();
@@ -42,12 +43,12 @@ const Branches = () => {
 
     const { getTableProps, getTableBodyProps, headerGroups, page, prepareRow } = tableInstance;
 
-    if (isLoading) return <div>Loading...</div>;
+    if (isLoading) return <div><Spinner loading={true} size={60} /></div>;
     if (isError) return <div>An error occurred: {error.message}</div>;
 
     return (
         <div className="grid h-full grid-cols-1 gap-5 p-5 ">
-            <div className="text-2xl font-bold flex justify-start items-center mt-6 ml-3">
+            <div className="text-2xl font-bold flex justify-start items-center ml-3">
                 Şubeler
             </div>
             <div className="col-span-1 h-fit w-full xl:col-span-1 2xl:col-span-2">

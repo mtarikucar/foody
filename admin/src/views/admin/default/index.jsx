@@ -1,17 +1,7 @@
-import {IoMdHome} from "react-icons/io";
-import {IoDocuments} from "react-icons/io5";
-import {MdBarChart, MdDashboard} from "react-icons/md";
-import mainPicture from "../../../assets/img/dashboards/main.png";
 
-import Widget from "../../../components/widget/Widget";
-import Requirements from "../branch/components/Upload";
 import React, {useState} from "react";
-import {useQuery} from "react-query";
 import useAuth from "../../../hooks/useAuth";
-import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
-import Package from "../profile/components/package";
 import Branches from "../profile/components/branches";
-
 const Dashboard = () => {
 
     const auth = useAuth();

@@ -13,7 +13,8 @@ const CustomCard = ({
                         extra,
                         showButton = true,
                         children,
-                        color
+                        color,
+                        description
                     }) => {
     const [heart, setHeart] = useState(true);
     const cardClass = isSelected ? 'border-blue-500' : 'border-2';
@@ -40,6 +41,11 @@ const CustomCard = ({
                             {author && (
                                 <p className="mt-1 text-sm font-medium text-gray-600 md:mt-2">
                                     Oluşturan: {author}
+                                </p>
+                            )}
+                            {description && (
+                                <p className="mt-1 text-sm font-medium text-gray-600 md:mt-2">
+                                    {description}
                                 </p>
                             )}
                         </div>

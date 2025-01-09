@@ -1,12 +1,30 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import Card from "../../../../components/card";
-import { Button } from "@chakra-ui/button";
+import {Button} from "@chakra-ui/button";
 import UpdateProduct from "../../products/components/UpdateProduct";
-import { useMutation, useQuery, useQueryClient } from "react-query";
-import { axiosPrivate } from "../../../../api/axios";
+import {useMutation, useQuery, useQueryClient} from "react-query";
+import {axiosPrivate} from "../../../../api/axios";
 import useAuth from "../../../../hooks/useAuth";
 
-const CustomList = ({ datas, menuId }) => {
+
+// Pastel renk paleti
+const colors = [
+    "#FFB6C1", // Light Pink
+    "#FFD700", // Gold
+    "#98FB98", // Pale Green
+    "#87CEEB", // Sky Blue
+    "#FFA07A", // Light Salmon
+    "#DA70D6", // Orchid
+    "#FFC0CB", // Pink
+    "#D8BFD8", // Thistle
+    "#ADD8E6", // Light Blue
+];
+
+const getRandomColor = () => {
+    return colors[Math.floor(Math.random() * colors.length)];
+};
+
+const CustomList = ({datas, menuId}) => {
     const [isOpen, setIsOpen] = useState(false);
     const [selected, setSelected] = useState();
     const auth = useAuth();
@@ -20,7 +38,7 @@ const CustomList = ({ datas, menuId }) => {
         setSelected(data);
     };
 
-    const { data: features, isSuccess } = useQuery('features', async () => {
+    const {data: features, isSuccess} = useQuery('features', async () => {
         try {
             const response = await axiosPrivate.get(`/product/features?companyId=${auth.companyId}`);
             return response.data;
@@ -35,63 +53,70 @@ const CustomList = ({ datas, menuId }) => {
     };
 
     return (
-        <Card extra={"mt-3 !z-5 overflow-hidden"}>
-            <UpdateProduct isOpen={isOpen} onClose={toggleProductModal} productData={selected} menuId={menuId} />
-            <div className="flex items-center justify-between rounded-md p-3">
-                <div className="text-lg font-bold text-navy-700 dark:text-white">
-                    Ürünler
-                </div>
-            </div>
+        <Card extra={"mt-3 overflow-hidden"}>
+            {/* Ürün güncelleme modalı */}
+            <UpdateProduct
+                isOpen={isOpen}
+                onClose={toggleProductModal}
+                productData={selected}
+                menuId={menuId}
+            />
 
-            {datas && datas.filter(item => item != null).map((data, index) => (
-                <div
-                    key={index}
-                    onClick={() => handleSubmit(data)}
-                    className="flex h-full w-full items-start justify-between bg-white px-3 py-[20px] hover:shadow-2xl dark:!bg-navy-800 dark:shadow-none dark:hover:!bg-navy-700 hover:bg-gray-200 cursor-pointer rounded-md"
-                >
-                    <div className="flex sm:flex-row flex-col items-center gap-3">
-                        <div className="flex h-16 w-16 items-start sm:relative">
-                            {data?.images?.slice(0, 3).map((image, i) => (
-                                <img
-                                    key={i}
-                                    className={`h-full w-full rounded-xl sm:absolute drop-shadow-lg z-30 translate-x-${i * 3} object-cover`}
-                                    src={image}
-                                    alt=""
-                                />
-                            ))}
+            {datas &&
+                datas.filter((item) => item != null).map((data, index) => (
+                    <div
+                        key={index}
+                        onClick={() => handleSubmit(data)}
+                        className="grid grid-cols-12 gap-4 p-4 mt-3 bg-white shadow-lg rounded-lg hover:bg-gray-100 cursor-pointer dark:bg-navy-800 dark:hover:bg-navy-700"
+                    >
+                        {/* Ürün Resimleri */}
+                        <div className="col-span-3 flex items-center justify-start">
+                            <div className="relative flex items-center justify-center w-16 h-16">
+                                {data?.images?.slice(0, 3).map((image, i) => (
+                                    <img
+                                        key={i}
+                                        className={`absolute rounded-lg object-cover w-16 h-16 transform translate-x-${i * 2}`}
+                                        src={image}
+                                        alt={data?.name}
+                                    />
+                                ))}
+                            </div>
                         </div>
-                        <div className="flex flex-col translate-x-6">
+
+                        {/* Ürün Bilgileri */}
+                        <div className="col-span-5 flex flex-col justify-center">
                             <h5 className="text-base font-bold text-navy-700 dark:text-white">
                                 {data?.name}
                             </h5>
-                            <p className="mt-1 text-sm font-normal text-gray-600">
-                                {data?.categoryId}
+                            <p className="text-sm font-normal text-gray-600">
+                                Kategori: {data?.categoryId}
                             </p>
                         </div>
-                    </div>
 
-                    <div className="col-span-2 grid grid-cols-4 ">
-                        {getFeatureNames(data.featureIds).map((feature) => (
-                            <div
-                                key={feature?.featureId}
-                                className="p-1 rounded-md m-1 text-center border-2 flex items-center justify-center cursor-pointer"
-                            >
-                                {feature?.featureName}
+                        {/* Ürün Özellikleri */}
+                        <div className="col-span-2 flex flex-wrap items-center gap-2">
+                            {getFeatureNames(data.featureIds).map((feature) => (
+                                <div
+                                    key={feature?.featureId}
+                                    style={{ backgroundColor: getRandomColor() }} // Rastgele renk atanıyor
+                                    className="p-2 text-sm font-bold text-center text-white rounded-md"
+                                >
+                                    {feature?.featureName}
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Fiyat ve Değerlendirme */}
+                        <div className="col-span-2 flex flex-col justify-center">
+                            <div className="text-sm font-bold text-navy-700 dark:text-white">
+                                {data?.price} Tl
                             </div>
-                        ))}
-                    </div>
-
-                    <div className="mt-1 flex items-center space-x-8 justify-center text-navy-700 dark:text-white">
-                        <div className="ml-1 flex items-center text-sm font-bold text-navy-700 dark:text-white">
-                            {data?.price} <p className="ml-1">Tl</p>
-                        </div>
-                        <div className="ml-2 flex items-center text-sm font-normal text-gray-600 dark:text-white">
-                            <p>{data?.ratings}</p>
-                            <p className="ml-1">rate</p>
+                            <div className="text-sm font-normal text-gray-600 dark:text-white">
+                                ⭐ ({data?.ratings})
+                            </div>
                         </div>
                     </div>
-                </div>
-            ))}
+                ))}
         </Card>
     );
 };

@@ -27,6 +27,7 @@ public class Addition {
     private Double card;
     private Double cash;
     private Double other;
+    private UUID branchId;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "addition_order_ids", joinColumns = @JoinColumn(name = "addition_id"))

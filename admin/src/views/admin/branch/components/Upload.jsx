@@ -16,7 +16,7 @@ const   Requirements = ({branch, isRender}) => {
         };
 
         return (
-            <Card extra={"w-full h-full p-3"}>
+            <Card extra={"w-full h-full  p-3"}>
                 {Object.keys(branchDetails).map(key => (
                     <div key={key} className="flex items-center gap-2 mt-2">
                         {branch[key] === null ?
@@ -55,7 +55,7 @@ const   Requirements = ({branch, isRender}) => {
 
     return (
         <Card
-            className="grid h-full w-full grid-cols-2 gap-3 rounded-[20px] bg-white bg-clip-border p-3 font-dm shadow-3xl shadow-shadow-500 dark:!bg-navy-800 dark:shadow-none 2xl:grid-cols-11">
+            className="grid h-full w-full grid-cols-2 gap-3  bg-white  bg-clip-border p-3 font-dm  dark:!bg-navy-800 dark:shadow-none 2xl:grid-cols-11">
 
 
             <div

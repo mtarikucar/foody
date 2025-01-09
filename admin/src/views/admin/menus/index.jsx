@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import React, { useMemo } from "react";
 import { useTable, useSortBy, usePagination } from "react-table";
 import { FaArrowRight } from 'react-icons/fa';
+import Spinner from "../../../components/Spinner/Spinner";
 
 const Menus = () => {
     const companyId = useSelector((state) => state.auth.companyId);
@@ -37,7 +38,7 @@ const Menus = () => {
 
     const { getTableProps, getTableBodyProps, headerGroups, page, prepareRow } = tableInstance;
 
-    if (isLoading) return <div>Loading...</div>;
+    if (isLoading) return <div><Spinner loading={true} size={60} /></div>;
     if (isError) return <div>An error occurred: {error.message}</div>;
 
     return (
