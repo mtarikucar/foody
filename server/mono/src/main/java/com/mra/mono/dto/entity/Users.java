@@ -32,6 +32,7 @@ public class Users implements UserDetails {
     private UUID userId;
 
     private UUID companyId;
+    private UUID branchId;
     private String firstName;
     private String lastName;
     private String phoneNumber;
