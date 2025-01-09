@@ -36,7 +36,7 @@ import OrderTable from "./views/admin/orderTable";
 import Dashboard from "./views/admin/reports/additionReport";
 
 const routes = [
-  {
+ /* {
     name: "Paneller",
     layout: "/admin",
     path: "default",
@@ -44,7 +44,7 @@ const routes = [
     component: <MainDashboard />,
     allowedRoles : ["ADMIN"],
     isShow: true
-  },
+  },*/
   {
     name: "Şube",
     layout: "/admin",

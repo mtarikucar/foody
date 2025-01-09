@@ -1,29 +1,24 @@
 import React from 'react';
-import {Formik, Form, Field, ErrorMessage} from 'formik';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import axios from "../../api/axios";
-import {useMutation, useQueryClient} from "react-query";
-import {useDispatch} from "react-redux";
-import {loginSuccess} from "../../store/AuthSlice";
-import {useNavigate, NavLink} from "react-router-dom";
-import {toast} from "react-toastify";
+import { useMutation, useQueryClient } from "react-query";
+import { useDispatch } from "react-redux";
+import { loginSuccess } from "../../store/AuthSlice";
+import { useNavigate, NavLink } from "react-router-dom";
+import { toast } from "react-toastify";
 import PhoneInput from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
 
-// Formik için validasyon şeması
+// Form validation schema
 const signUpSchema = Yup.object().shape({
-    firstName: Yup.string()
-        .required('Ad alanı zorunludur'),
-    lastName: Yup.string()
-        .required('Soyad alanı zorunludur'),
-    email: Yup.string()
-        .email('Geçersiz e-posta adresi')
-        .required('E-posta alanı zorunludur'),
+    firstName: Yup.string().required('Ad alanı zorunludur'),
+    lastName: Yup.string().required('Soyad alanı zorunludur'),
+    email: Yup.string().email('Geçersiz e-posta adresi').required('E-posta alanı zorunludur'),
     password: Yup.string()
         .min(8, 'Şifre en az 8 karakter olmalıdır')
         .required('Şifre alanı zorunludur'),
-    phoneNumber: Yup.string()
-        .required('Telefon numarası alanı zorunludur'),
+    phoneNumber: Yup.string().required('Telefon numarası alanı zorunludur'),
 });
 
 export default function SignUpPage() {
@@ -31,24 +26,25 @@ export default function SignUpPage() {
     const dispatch = useDispatch();
     const queryClient = useQueryClient();
 
-    const mutation = useMutation(data => axios.post('/auth/register', data), {
-        onSuccess: (data) => {
-            queryClient.invalidateQueries('userData');
-            dispatch(loginSuccess(data.data));
-            toast.success("Kullanıcı başarıyla oluşturuldu")
-            navigate("/");
-        },
-        onError: (error) => {
-            toast.error(error.response.data?.msg);
-        },
-    });
+    const mutation = useMutation(
+        (data) => axios.post('/auth/register', data),
+        {
+            onSuccess: (data) => {
+                queryClient.invalidateQueries('userData');
+                dispatch(loginSuccess(data.data));
+                toast.success("Kullanıcı başarıyla oluşturuldu");
+                navigate("/");
+            },
+            onError: (error) => {
+                toast.error(error.response.data?.msg);
+            },
+        }
+    );
 
     return (
-        <div className="mb-16 flex w-full items-center justify-center px-2 h-dvh">
-            <div className="mt-[10vh] w-full flex-col items-center max-w-[420px] bg-white p-4 shadow-lg rounded-lg">
-                <h4 className="mb-4 text-2xl font-bold text-center text-navy-700 dark:text-white">
-                    Kayıt Ol
-                </h4>
+        <div className="min-h-screen flex items-center justify-center px-4 ">
+            <div className="w-full max-w-4xl bg-white dark:bg-gray-800 p-8 shadow-lg rounded-lg">
+                <h4 className="mb-6 text-3xl font-bold text-center text-navy-700 dark:text-white">Kayıt Ol</h4>
                 <Formik
                     initialValues={{
                         firstName: '',
@@ -58,85 +54,110 @@ export default function SignUpPage() {
                         phoneNumber: '',
                     }}
                     validationSchema={signUpSchema}
-                    onSubmit={(values) => {
-                        mutation.mutate(values);
-                    }}
+                    onSubmit={(values) => mutation.mutate(values)}
                 >
-                    {({setFieldValue, isSubmitting}) => (
-                        <Form className="space-y-4">
+                    {({ setFieldValue, isSubmitting }) => (
+                        <Form className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            {/* First Name */}
                             <div>
-                                <label htmlFor="firstName" className={`text-sm text-navy-700 dark:text-white ml-3 font-bold border-gray-200 dark:!border-white/10 `}>
+                                <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                     Adınız
                                 </label>
-                                <Field name="firstName"
-                                       className="mt-2 flex h-12 w-full items-center justify-center rounded-xl border bg-white/0 p-3 text-sm outline-none"
-                                       placeholder="Adınız"/>
-                                <ErrorMessage name="firstName" component="div" className="form-error"/>
+                                <Field
+                                    id="firstName"
+                                    name="firstName"
+                                    placeholder="Adınız"
+                                    className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white p-3 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                />
+                                <ErrorMessage name="firstName" component="div" className="text-sm text-red-500 mt-1" />
                             </div>
+
+                            {/* Last Name */}
                             <div>
-                                <label htmlFor="firstName"
-                                       className={`text-sm text-navy-700 dark:text-white ml-3 font-bold border-gray-200 dark:!border-white/10 `}>
+                                <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                     Soyadınız
                                 </label>
-                                <Field name="lastName"
-                                       className="mt-2 flex h-12 w-full items-center justify-center rounded-xl border bg-white/0 p-3 text-sm outline-none"
-                                       placeholder="soyadınız"/>
-                                <ErrorMessage name="lastName" component="div" className="form-error"/>
+                                <Field
+                                    id="lastName"
+                                    name="lastName"
+                                    placeholder="Soyadınız"
+                                    className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white p-3 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                />
+                                <ErrorMessage name="lastName" component="div" className="text-sm text-red-500 mt-1" />
                             </div>
-                            <div>
-                                <label htmlFor="firstName"
-                                       className={`text-sm text-navy-700 dark:text-white ml-3 font-bold border-gray-200 dark:!border-white/10 `}>
-                                    email
+
+                            {/* Email */}
+                            <div className="md:col-span-2">
+                                <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                    E-posta
                                 </label>
-                                <Field name="email"
-                                       className="mt-2 flex h-12 w-full items-center justify-center rounded-xl border bg-white/0 p-3 text-sm outline-none"
-                                       placeholder="email"/>
-                                <ErrorMessage name="email" component="div" className="form-error"/>
+                                <Field
+                                    id="email"
+                                    name="email"
+                                    placeholder="E-posta adresiniz"
+                                    className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white p-3 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                />
+                                <ErrorMessage name="email" component="div" className="text-sm text-red-500 mt-1" />
                             </div>
-                            <div>
-                                <label htmlFor="firstName"
-                                       className={`text-sm text-navy-700 dark:text-white ml-3 font-bold border-gray-200 dark:!border-white/10 `}>
+
+                            {/* Password */}
+                            <div className="md:col-span-2">
+                                <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                     Şifre
                                 </label>
-                                <Field name="password"
-                                       className="mt-2 flex h-12 w-full items-center justify-center rounded-xl border bg-white/0 p-3 text-sm outline-none"
-                                       placeholder="En az 8 karakter"/>
-                                <ErrorMessage name="password" component="div" className="form-error"/>
+                                <Field
+                                    id="password"
+                                    name="password"
+                                    type="password"
+                                    placeholder="Şifrenizi girin"
+                                    className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white p-3 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                />
+                                <ErrorMessage name="password" component="div" className="text-sm text-red-500 mt-1" />
                             </div>
-                            <div>
-                                <label htmlFor="firstName"
-                                       className={`text-sm text-navy-700 dark:text-white ml-3 font-bold border-gray-200 dark:!border-white/10 `}>
+
+                            {/* Phone Number */}
+                            <div className="md:col-span-2">
+                                <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                     Telefon Numaranız
                                 </label>
                                 <PhoneInput
+                                    id="phoneNumber"
                                     name="phoneNumber"
                                     placeholder="Telefon numaranız"
-                                    className="mt-2 flex h-12 w-full items-center justify-center rounded-xl border bg-white/0 p-3 text-sm outline-none"
-                                    onChange={value => setFieldValue('phoneNumber', value, true)}
-                                    defaultCountry={'TR'}
+                                    className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white p-3 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                    onChange={(value) => setFieldValue('phoneNumber', value)}
+                                    defaultCountry="TR"
                                 />
-                                <ErrorMessage name="phoneNumber" component="div" className="form-error"/>
+                                <ErrorMessage name="phoneNumber" component="div" className="text-sm text-red-500 mt-1" />
                             </div>
-                            <button
-                                type="submit"
-                                className={`mt-2 w-full rounded-xl py-[12px] text-base font-medium transition duration-200
-                                    ${mutation.isLoading
-                                    ? "bg-brand-300 text-white cursor-not-allowed"
-                                    : "bg-brand-500 hover:bg-brand-600 active:bg-brand-700 text-white"}
-                                     `}
-                                disabled={mutation.isLoading}
-                            >
-                                {mutation.isLoading ? "Bekleyiniz...":"Kayıt Ol"}
-                            </button>
+
+                            {/* Submit Button */}
+                            <div className="md:col-span-2">
+                                <button
+                                    type="submit"
+                                    disabled={mutation.isLoading || isSubmitting}
+                                    className={`w-full py-3 rounded-lg text-white font-medium transition ${
+                                        mutation.isLoading
+                                            ? "bg-gray-400 cursor-not-allowed"
+                                            : "bg-indigo-600 hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500"
+                                    }`}
+                                >
+                                    {mutation.isLoading ? "Bekleyiniz..." : "Kayıt Ol"}
+                                </button>
+                            </div>
                         </Form>
                     )}
                 </Formik>
-                <div className="mt-4 text-center">
-                <span className="text-sm font-medium text-navy-700 dark:text-gray-600">
-                    Zaten bir hesabınız var mı?
-                </span>
-                    <NavLink to={'/auth/sign-in'}
-                             className="ml-1 text-sm text-brand-500 hover:text-brand-600 dark:text-white">
+
+                {/* Footer */}
+                <div className="mt-6 text-center">
+          <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
+            Zaten bir hesabınız var mı?
+          </span>
+                    <NavLink
+                        to="/auth/sign-in"
+                        className="ml-1 text-sm font-medium text-indigo-600 hover:text-indigo-700 dark:text-indigo-400"
+                    >
                         Giriş Yap
                     </NavLink>
                 </div>

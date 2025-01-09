@@ -5,12 +5,15 @@ import Modal from '../../../../../components/modal';
 import CustomCard from '../../../../../components/card/CustomCard';
 import useAuth from "../../../../../hooks/useAuth";
 import {toast} from "react-toastify";
+import {useDispatch} from "react-redux";
+import {setBranch} from "../../../../../store/AuthSlice";
 
-function Index({isOpen, onClose, branch}) {
+function Index({isOpen, onClose, branch,message=""}) {
     const auth = useAuth();
     const [selectedMenu, setSelectedMenu] = useState(null);
     const axiosPrivate = useAxiosPrivate();
     const queryClient = useQueryClient();
+    const dispatch = useDispatch();
 
     const {data: menus, isLoading, error} = useQuery('menus', async () => {
             const response = await axiosPrivate.get(`/menu?companyId=${auth.companyId}`);
@@ -33,6 +36,7 @@ function Index({isOpen, onClose, branch}) {
     }, {
         onSuccess: () => {
             queryClient.invalidateQueries("branch");
+            dispatch(setBranch({ branchId: branch.branchId, menuId: selectedMenu}));
             toast("Menü değiştirildi");
             onClose();
         }
@@ -43,7 +47,7 @@ function Index({isOpen, onClose, branch}) {
     };
 
     return (
-        <Modal title={'Şube Menüsü'} description={"Şubeye ekleyebileceğin menüler"} size="extraLarge" isOpen={isOpen}
+        <Modal title={'Şube Menüsü'} description={message||"Şubeye ekleyebileceğin menüler"} size="extraLarge" isOpen={isOpen}
                onClose={onClose}>
             <div className="grid grid-cols-3 gap-5 m-3">
                 {menus && menus.data.map(menu => (

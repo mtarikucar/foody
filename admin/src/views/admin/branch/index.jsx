@@ -1,8 +1,8 @@
-import { useQuery } from "react-query";
+import {useQuery} from "react-query";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
-import { NavLink, useParams } from "react-router-dom";
+import {NavLink, useParams} from "react-router-dom";
 import Upload from "./components/Upload";
-import React, { useState } from "react";
+import React, {useState} from "react";
 import Card from "../../../components/card";
 import MenuModal from "./components/MenuModal";
 import CodeModal from "./components/CodeModal";
@@ -13,18 +13,18 @@ import Spinner from "../../../components/Spinner/Spinner";
 
 const Branch = () => {
     const axiosPrivate = useAxiosPrivate();
-    const { id } = useParams();
+    const {id} = useParams();
 
     const [isMenuModalOpen, setIsMenuModalOpen] = useState(false);
     const [isCodeModalOpen, setIsCodeModalOpen] = useState(false);
     const [requirementComplete, setRequirementComplete] = useState(false);
 
-    const { data: branch, isLoading, error } = useQuery("branch", async () => {
+    const {data: branch, isLoading, error} = useQuery("branch", async () => {
         const response = await axiosPrivate.get(`/branch/${id}`);
         return response.data.data;
     });
 
-    if (isLoading) return <div><Spinner loading={true} size={60} /></div>;
+    if (isLoading) return <div><Spinner loading={true} size={60}/></div>;
     if (error) return <div>An error occurred</div>;
 
     return (
@@ -58,11 +58,13 @@ const Branch = () => {
                                 <p className="text-2xl font-bold text-navy-700 dark:text-white">17</p>
                                 <p className="text-sm font-normal text-gray-600">Aktif çalışan sayısı</p>
                             </div>
-                            <div className="flex flex-col items-center justify-center border-2 rounded-lg w-full py-2 m-2">
+                            <div
+                                className="flex flex-col items-center justify-center border-2 rounded-lg w-full py-2 m-2">
                                 <p className="text-2xl font-bold text-navy-700 dark:text-white">9.7K</p>
                                 <p className="text-sm font-normal text-gray-600">Günlük ziyaret sayısı</p>
                             </div>
-                            <div className="flex flex-col items-center justify-center border-2 rounded-lg w-full py-2 m-2">
+                            <div
+                                className="flex flex-col items-center justify-center border-2 rounded-lg w-full py-2 m-2">
                                 <p className="text-xl uppercase font-bold text-navy-700 dark:text-white">{branch?.menuName}</p>
                                 <Button
                                     onClick={() => setIsMenuModalOpen(!isMenuModalOpen)}
@@ -101,7 +103,7 @@ const Branch = () => {
                 </div>
 
                 <div className="lg:!mb-0 col-span-3">
-                        <Upload branch={branch}/>
+                    <Upload branch={branch}/>
 
                 </div>
 
@@ -110,20 +112,20 @@ const Branch = () => {
                     <Card extra={"flex items-center w-full h-full p-[16px] bg-cover"}>
                         <div className="w-full h-full  flex flex-col items-center justify-center">
                             <h4 className="text-xl font-bold text-navy-700 dark:text-white">
-                                    Çalışanları Yönet
-                                </h4>
-                                <p className="text-base font-normal text-gray-600">
-                                    Çalışanlarınızı buradan yönetebilirsiniz.
-                                </p>
-                                <NavLink
-                                    to={"/admin/staffs/" + id}
-                                    className="mt-4 px-6 py-2 text-white bg-blue-600 rounded-full hover:bg-blue-700"
-                                >
-                                    Çalışanları Yönet
-                                </NavLink>
-                            </div>
-                        </Card>
-                    </div>
+                                Çalışanları Yönet
+                            </h4>
+                            <p className="text-base font-normal text-gray-600">
+                                Çalışanlarınızı buradan yönetebilirsiniz.
+                            </p>
+                            <NavLink
+                                to={"/admin/staffs/" + id}
+                                className="mt-4 px-6 py-2 text-white bg-blue-600 rounded-full hover:bg-blue-700"
+                            >
+                                Çalışanları Yönet
+                            </NavLink>
+                        </div>
+                    </Card>
+                </div>
 
             </div>
 
