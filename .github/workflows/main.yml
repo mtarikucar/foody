@@ -8,76 +8,37 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+
     steps:
+    # 1) Kodu Çek (Checkout)
     - name: Checkout code
       uses: actions/checkout@v2
 
-    # Setup Node.js
-    - name: Setup Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '18'
-      
-    - name: Install Dependencies
-      run: |
-        npm install --prefix ./admin
-        npm install --prefix ./client
-        npm install --prefix ./landing
+    # 2) Docker CLI Kullanabilmek İçin (Varsayılan Ubuntu-latest'te Docker kurulu gelir)
+    #    Eğer ekstra kurulum gerekirse Setup Docker action'lar eklenebilir.
 
-    # Build the admin project
-    - name: Build Admin
-      run: |
-        CI=false npm run build --prefix ./admin
-      env:
-        REACT_APP_BASE_API_URL: ${{ secrets.REACT_APP_BASE_API_URL }}
-    
-    # Build the client project
-    - name: Build Client
-      run: |
-        CI=false npm run build --prefix ./client
-    
-    # Build the landing project
-    - name: Export Landing
-      run: |
-        CI=false npm run export --prefix ./landing
-
-    # Setup Java
-    - name: Setup Java
-      uses: actions/setup-java@v2
+    # 3) (Opsiyonel) Docker Registry'ye login
+    #    Eğer imajları Docker Hub veya GHCR gibi bir registry'ye push edecekseniz:
+    - name: Log in to Docker Registry
+      uses: docker/login-action@v2
       with:
-        distribution: 'adopt'
-        java-version: '17'
+        registry: docker.io  # veya docker.io
+        username: ${{ secrets.REGISTRY_USERNAME }}
+        password: ${{ secrets.REGISTRY_PASSWORD }}
 
-    # Build Java Spring Boot project
-    - name: Build Java Spring Boot Project
+    # 4) Docker Compose Build
+    - name: Docker Compose Build
       run: |
-        cd ./server/mono/
-        mvn clean install
-    
-    # Deploy all projects
-    - name: Deploy Projects
-      uses: appleboy/scp-action@master
-      with:
-        host: ${{ secrets.SERVER_IP }}
-        username: ${{ secrets.SSH_USERNAME }}
-        password: ${{ secrets.SSH_PASSWORD }}
-        port: 22
-        rm: true # This option will remove the files before transferring new ones
-        source: "./landing/out/,./admin/build/,./client/build/,./server/mono/target/mono-0.0.1-SNAPSHOT.jar"
-        target: "/var/www/foody"
+        docker-compose -f docker-compose.yml build
 
-    # Restart Nginx
-    - name: Restart Nginx
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.SERVER_IP }}
-        username: ${{ secrets.SSH_USERNAME }}
-        password: ${{ secrets.SSH_PASSWORD }}
-        port: 22
-        script: sudo systemctl restart nginx
-    
-    # Run Java Spring Boot project
-    - name: Run Java Spring Boot Project
+    # 5) (Opsiyonel) Docker Compose Push
+    #    Eğer imajları registry'ye push edecekseniz:
+    - name: Docker Compose Push
+      run: |
+        docker-compose -f docker-compose.yml push
+
+    # 6) Uzak Sunucuya SSH ile Bağlanarak Deploy
+    - name: Deploy to Server
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.SERVER_IP }}
@@ -85,5 +46,20 @@ jobs:
         password: ${{ secrets.SSH_PASSWORD }}
         port: 22
         script: |
-          cd /var/www/foody/server/mono/target/
-          nohup java -jar mono-0.0.1-SNAPSHOT.jar &
+          cd /app  # Uzak sunucudaki proje klasörü
+          # Repo code orada ise git pull yapabilirsiniz veya bu code'u rsync/scp ile gönderebilirsiniz
+          
+          # Eğer code ve docker-compose.yml sunucuda hazır ise:
+          docker-compose pull       # Kayıtlı imajları registry'den çek
+          docker-compose up -d --build
+
+    # 7) (Opsiyonel) Nginx Restart veya diğer komutlar
+    - name: Restart Nginx
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SERVER_IP }}
+        username: ${{ secrets.SSH_USERNAME }}
+        password: ${{ secrets.SSH_PASSWORD }}
+        port: 22
+        script: |
+          sudo systemctl restart nginx
