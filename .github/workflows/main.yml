@@ -61,6 +61,13 @@ jobs:
           docker build -t ${{ secrets.REGISTRY_USERNAME }}/nginx:latest ./nginx
           docker push ${{ secrets.REGISTRY_USERNAME }}/nginx:latest
 
+      - name: Debug File Paths
+        run: |
+          echo "Checking root directory files:"
+          ls -la
+          echo "Checking nginx directory files:"
+          ls -la nginx/
+
       # 6) Sunucuya docker-compose.yaml (ve gerekiyorsa diğer conf dosyaları) kopyala
       - name: Copy docker-compose to server
         uses: appleboy/scp-action@v0.1.0
