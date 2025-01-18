@@ -1,56 +1,41 @@
 version: "3.8"
 
 services:
-  # ==== Admin (React) ====
   admin:
-    build:
-      context: ./admin
-      dockerfile: Dockerfile
+    image: tarik42777/admin:latest
     container_name: admin_container
-    # Dış dünyaya 80 portunu açmaya gerek yok. Nginx üzerinden erişeceğiz.
     expose:
       - "80"
 
-  # ==== Client (React) ====
   client:
-    build:
-      context: ./client
-      dockerfile: Dockerfile
+    image: tarik42777/client:latest
     container_name: client_container
     expose:
       - "80"
 
-  # ==== Landing (Next.js) ====
   landing:
-    build:
-      context: ./landing
-      dockerfile: Dockerfile
+    image: tarik42777/landing:latest
     container_name: landing_container
     expose:
       - "3000"
 
-  # ==== Backend (Spring Boot) ====
   backend:
-    build:
-      context: ./server/mono
-      dockerfile: Dockerfile
+    image: tarik42777/backend:latest
     container_name: backend_container
     expose:
       - "8080"
     environment:
-      # PostgreSQL bağlantı bilgileri
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/menu
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
     depends_on:
       - postgres
 
-  # ==== PostgreSQL ====
   postgres:
     image: postgres:latest
     container_name: postgres_container
     ports:
-      - "5432:5432"  # pgAdmin ile host makineden erişebilmek için
+      - "5432:5432"
     environment:
       POSTGRES_DB: menu
       POSTGRES_USER: postgres
@@ -58,14 +43,9 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
-  # ==== Nginx Reverse Proxy ====
   nginx:
-    # İster image: nginx:alpine + volumes da diyebilirsiniz
-    build:
-      context: ./nginx
-      dockerfile: Dockerfile
+    image: tarik42777/nginx:latest
     container_name: nginx_container
-    # Nginx, dış dünyaya 80 portundan ulaşılabilir olacak
     ports:
       - "80:80"
     depends_on:
@@ -73,9 +53,6 @@ services:
       - client
       - landing
       - backend
-    # volume mount ile config dosyasını override etmek de mümkün
-    # volumes:
-    #   - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
 
 networks:
   default:
