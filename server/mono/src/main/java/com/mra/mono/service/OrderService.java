@@ -3,12 +3,15 @@ package com.mra.mono.service;
 import com.mra.mono.dto.entity.*;
 import com.mra.mono.dto.request.CreateOrderReq;
 import com.mra.mono.dto.request.OrderProductRequest;
+import com.mra.mono.dto.request.TableAddReq;
 import com.mra.mono.dto.response.OrderDetailDTO;
 import com.mra.mono.dto.response.OrderRes;
 import com.mra.mono.repository.OrderDetailRepository;
 import com.mra.mono.repository.OrderRepository;
 import com.mra.mono.repository.ProductRepository;
+import com.mra.mono.repository.TableRepository;
 import jakarta.annotation.Resource;
+import jakarta.persistence.Table;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +31,9 @@ public class OrderService {
     private final OrderRepository orderRepository;
     @Resource
     private final ProductRepository productRepository;
+
+    @Resource
+    private final TableRepository tableRepository;
 
     @Resource
     private final OrderDetailRepository orderDetailRepository;
@@ -67,7 +73,11 @@ public class OrderService {
 
             OrderRes orderDTO = new OrderRes();
             orderDTO.setOrderId(savedOrder.getOrderId());
-            orderDTO.setTableId(savedOrder.getTableId());
+            orderDTO.setTable(
+                tableRepository.findById(savedOrder.getTableId())
+                .map(this::convertToTableDTO)
+                .orElse(null)
+            );
             orderDTO.setTotalAmount(savedOrder.getTotalAmount());
             orderDTO.setDiscount(savedOrder.getDiscount());
             orderDTO.setStatus(savedOrder.getStatus());
@@ -133,7 +143,11 @@ public class OrderService {
     private OrderRes convertToOrderRes(Order order) {
         OrderRes dto = new OrderRes();
         dto.setOrderId(order.getOrderId());
-        dto.setTableId(order.getTableId());
+        dto.setTable(
+            tableRepository.findById(order.getTableId())
+            .map(this::convertToTableDTO)
+            .orElse(null)
+        );
         dto.setTotalAmount(order.getTotalAmount());
         dto.setDiscount(order.getDiscount());
         dto.setStatus(order.getStatus());
@@ -152,6 +166,15 @@ public class OrderService {
         dto.setOrderDId(orderDetail.getId());
         dto.setQuantity(orderDetail.getQuantity());
         dto.setProduct(orderDetail.getProduct());
+        return dto;
+    }
+
+    private TableAddReq convertToTableDTO(DiningTable table) {
+        TableAddReq dto = new TableAddReq();
+        dto.setTableId(table.getTableId());
+        dto.setBranchId(table.getBranchId());
+        dto.setRegionId(table.getRegionId());
+        dto.setTableName(table.getTableName());
         return dto;
     }
 

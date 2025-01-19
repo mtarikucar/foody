@@ -76,7 +76,7 @@ const ManageStaff = () => {
                         <StaffList/>
                     </div>
                     <div className={"col-span-2 h-dvh bg-white shadow rounded-lg p-4"}>
-                    <AddStaffForm nextStep={nextStep} companyId={auth.companyId}/>
+                    <AddStaffForm nextStep={nextStep} companyId={auth?.companyId} branchId={auth?.branchId}/>
                     </div>
                 </div>
             }

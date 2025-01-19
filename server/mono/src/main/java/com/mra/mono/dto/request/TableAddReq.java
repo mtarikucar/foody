@@ -9,6 +9,8 @@ import java.util.UUID;
 @Data
 public class TableAddReq implements Serializable {
 
+    private UUID tableId;
+
     @NotNull(message = "branchId is not null")
     private UUID branchId;
 

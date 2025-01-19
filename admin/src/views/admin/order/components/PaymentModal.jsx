@@ -7,6 +7,7 @@ import {IoCashOutline, IoCardOutline, IoRemoveCircleOutline, IoAddCircleOutline,
 import {toast} from "react-toastify";
 import {useWebSocket} from "../../../../context/socket/WebSocketContext";
 import {useSelector} from "react-redux";
+import {useNavigate} from "react-router-dom";
 
 
 const PaymentModal = ({isOpen, onClose, tableId}) => {
@@ -21,6 +22,7 @@ const PaymentModal = ({isOpen, onClose, tableId}) => {
     const [paymentSuccess, setPaymentSuccess] = useState(false);
     const socket = useWebSocket();
     const user = useSelector((state) => state.auth);
+    const navigate = useNavigate();
     // Load orders and calculate total cost
     const {data: orders} = useQuery(['additionOrder'], async () => {
         const response = await axiosPrivate.get(`/orders?branchId=${auth?.branchId}&status=1&tableId=${tableId}`);
@@ -36,8 +38,6 @@ const PaymentModal = ({isOpen, onClose, tableId}) => {
 
 
     });
-
-    console.log(user)
 
     useEffect(() => {
         queryClient.invalidateQueries(['additionOrder']);
@@ -79,6 +79,7 @@ const PaymentModal = ({isOpen, onClose, tableId}) => {
             onClose();
             queryClient.invalidateQueries(['additionOrder']);
             queryClient.invalidateQueries(['tableOrder']);
+            navigate('/admin/order');
         } catch (error) {
             console.error('Payment submission failed:', error);
             toast('Ödeme başarısız oldu');

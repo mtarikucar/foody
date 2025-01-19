@@ -58,7 +58,7 @@ const Order = () => {
     }, {});
 
     const hasActiveOrder = (tableId) => {
-        return orders?.some(order => order.tableId === tableId);
+        return orders?.some(order => order.table?.tableId === tableId);
     };
 
     if (isLoading) return <div><Spinner loading={true} size={64} /></div>;

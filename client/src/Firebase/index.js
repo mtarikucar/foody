@@ -39,7 +39,6 @@ export const firebaseUploadImage = (
       );
     },
     (error) => {
-      console.log(error);
       toast.error("Error while uploading, Try again🤗");
       action(null);
       setTimeout(() => {

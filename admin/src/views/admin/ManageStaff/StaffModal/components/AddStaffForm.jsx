@@ -2,8 +2,9 @@ import {useMutation, useQueryClient} from 'react-query';
 import { useState } from 'react';
 import useAxiosPrivate from "../../../../../hooks/useAxiosPrivate";
 import {toast} from "react-toastify";
+import useAuth from "../../../../../hooks/useAuth";
 
-const AddStaffForm = ({nextStep, companyId}) => {
+const AddStaffForm = ({nextStep, companyId,branchId}) => {
 
 
     const axiosPrivate = useAxiosPrivate(); // Use your custom axios hook with authentication
@@ -21,7 +22,8 @@ const AddStaffForm = ({nextStep, companyId}) => {
         email: '',
         password: '',
         role: 'STAFF',
-        companyId: companyId
+        companyId: companyId,
+        branchId: branchId
     });
 
     const handleChange = (e) => {
@@ -33,7 +35,7 @@ const AddStaffForm = ({nextStep, companyId}) => {
         mutation.mutate(formData, {
             onSuccess: () => {
                 toast.success('Çalışan başarıyla eklendi');
-                queryClient.invalidateQueries(['staff']);
+                queryClient.invalidateQueries(['staffs']);
                 setFormData({
                     firstName: '',
                     lastName: '',
@@ -41,7 +43,8 @@ const AddStaffForm = ({nextStep, companyId}) => {
                     email: '',
                     password: '',
                     role: 'STAFF',
-                    companyId: companyId
+                    companyId: companyId,
+                    branchId: branchId
                 });
                 nextStep();
             },

@@ -32,8 +32,6 @@ const ProfileOverview = () => {
         return response.data.data;
     });
 
-    console.log("branch11111", branch);
-
     useEffect(() => {
         if (!auth?.menuId) {
             setIsMenuModalOpen(true);

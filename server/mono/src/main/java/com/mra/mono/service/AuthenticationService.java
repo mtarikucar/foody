@@ -61,9 +61,10 @@ public class AuthenticationService {
                 .lastName(request.getLastName())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.ADMIN)
+                .role(Optional.ofNullable(request.getRole()).orElse(Role.ADMIN))
                 .phoneNumber(request.getPhoneNumber())
                 .companyId(request.getCompanyId())
+                .branchId(request.getBranchId())
                 .createTime(new Date())
                 .lastLoginDate(new Date())
                 .build();
@@ -78,6 +79,7 @@ public class AuthenticationService {
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)
                 .companyId(savedUser.getCompanyId())
+                .branchId(savedUser.getBranchId())
                 .refreshToken(refreshToken)
                 .user(savedUser.getUserId())
                 .build();
@@ -117,6 +119,7 @@ public class AuthenticationService {
                     .role(user.getRole())
                     .packageId(packageId)
                     .companyId(user.getCompanyId())
+                    .branchId(user.getBranchId())
                     .logo(logo)
                     .accessToken(jwtToken)
                     .refreshToken(refreshToken)
