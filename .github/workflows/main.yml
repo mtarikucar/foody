@@ -61,12 +61,10 @@ jobs:
           docker build -t ${{ secrets.REGISTRY_USERNAME }}/nginx:latest ./nginx
           docker push ${{ secrets.REGISTRY_USERNAME }}/nginx:latest
 
-      - name: Debug File Paths
+      - name: Check File Content
         run: |
-          echo "Checking root directory files:"
-          ls -la
-          echo "Checking nginx directory files:"
-          ls -la nginx/
+          cat docker-compose.yaml
+          cat nginx/nginx.conf
 
       # 6) Sunucuya docker-compose.yaml (ve gerekiyorsa diğer conf dosyaları) kopyala
       - name: Copy docker-compose to server
@@ -76,8 +74,11 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
           port: 22
-          source: 'docker-compose.yaml nginx/nginx.conf'
+          source: |
+            ./docker-compose.yaml
+            ./nginx/nginx.conf
           target: '/app/menu_0'
+          debug: true
     
 
       # 7) Sunucuda Deploy
