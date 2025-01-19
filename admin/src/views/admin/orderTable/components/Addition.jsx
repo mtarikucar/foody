@@ -1,8 +1,9 @@
 import React, {useState} from 'react';
 import Spinner from "../../../../components/Spinner/Spinner";
 import {FiChevronDown} from "react-icons/fi";
+import notFound from "../../../../assets/img/products/not_found.jpg";
 
-const Addition = ({setPaymentModal, orders, isOrderLoading,submitQuickPayment}) => {
+const Addition = ({setPaymentModal, orders, isOrderLoading, submitQuickPayment}) => {
 
 
     const [openIndex, setOpenIndex] = useState(null);
@@ -10,6 +11,7 @@ const Addition = ({setPaymentModal, orders, isOrderLoading,submitQuickPayment}) 
     const totalAmount = orders?.reduce((acc, order) => {
         return acc + order.totalAmount;
     }, 0); // Başlangıç değeri 0
+
 
     return (<div className={"px-2.5  bg-white h-full rounded drop-shadow-lg"}>
         {/*<div className={"text-lg font-bold text-navy-700 dark:text-white mt-2"}>
@@ -53,38 +55,39 @@ const Addition = ({setPaymentModal, orders, isOrderLoading,submitQuickPayment}) 
                                         </ul>*/}
                                 <div className="border-2 p-2 rounded-xl">
                                     <ul role="list" className="-my-6 divide-y divide-gray-200">
-                                        {order?.orderDetails?.map((detail, detailIndex) => (<li className="flex py-6">
-                                            <div
-                                                className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md  border-gray-200">
-                                            <img
-                                                    src={detail.product.images[0]}
-                                                    alt="Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt."
-                                                    className="h-full w-full object-cover object-center"/>
-                                            </div>
-
-                                            <div className="ml-4 flex flex-1 flex-col">
-                                                <div>
-                                                    <div
-                                                        className="flex justify-between text-base font-medium text-gray-900">
-                                                        <h3>
-                                                            <a href="#">{detail.product.name} </a>
-                                                        </h3>
-                                                        <p className="ml-4">₺{detail.product.price}.00</p>
-                                                    </div>
-                                                    <p className="mt-1 text-sm text-gray-500">{detail.product.description}</p>
-                                                </div>
+                                        {order?.orderDetails?.map((detail, detailIndex) => (
+                                            <li key={detailIndex} className="flex py-6">
                                                 <div
-                                                    className="flex flex-1 items-end justify-between text-sm">
-                                                    <p className="text-gray-500">Qty {detail.quantity}</p>
+                                                    className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md  border-gray-200">
+                                                    <img
+                                                        src={detail.product.images ? detail.product.images[0] : notFound}
+                                                        alt="Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt."
+                                                        className="h-full w-full object-cover object-center"/>
+                                                </div>
 
-                                                    <div className="flex">
-                                                        <button type="button"
-                                                                className="font-medium text-indigo-600 hover:text-indigo-500">Remove
-                                                        </button>
+                                                <div className="ml-4 flex flex-1 flex-col">
+                                                    <div>
+                                                        <div
+                                                            className="flex justify-between text-base font-medium text-gray-900">
+                                                            <h3>
+                                                                <a href="#">{detail.product.name} </a>
+                                                            </h3>
+                                                            <p className="ml-4">₺{detail.product.price}.00</p>
+                                                        </div>
+                                                        <p className="mt-1 text-sm text-gray-500">{detail.product.description}</p>
+                                                    </div>
+                                                    <div
+                                                        className="flex flex-1 items-end justify-between text-sm">
+                                                        <p className="text-gray-500">Qty {detail.quantity}</p>
+
+                                                        <div className="flex">
+                                                            <button type="button"
+                                                                    className="font-medium text-indigo-600 hover:text-indigo-500">Remove
+                                                            </button>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </li>))}
+                                            </li>))}
 
                                     </ul>
                                 </div>
@@ -121,11 +124,11 @@ const Addition = ({setPaymentModal, orders, isOrderLoading,submitQuickPayment}) 
                             </button>
                         </div>
                     </div>
-                    </div>
+                </div>
             ) : (
                 <div className="text-center text-gray-500">
                     Bekleyen bir sipariş yok.
-            </div>
+                </div>
 
             )}
         </div>

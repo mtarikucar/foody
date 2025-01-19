@@ -16,7 +16,6 @@ const Menu = ({title}: { title?: string }) => {
     const [{foodItems, menuData, categoriesData, branchData}, dispatch] =
         useStateValue();
     const {id} = useParams();
-    console.log(id)
     const [menuId, setMenuId] = useState(null);
     const [showButton, setShowButton] = useState(false);
     const [scrollValue, setScrollValue] = useState(0);

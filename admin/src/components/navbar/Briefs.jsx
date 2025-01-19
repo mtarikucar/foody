@@ -32,13 +32,6 @@ const Breifs = () => {
         };
     }, [socket]);
 
-    const { data: notification } = useQuery("notification", async () => {
-        const response = await axiosPrivate.get(
-            `/notification?userId=${auth.currentUser}`
-        );
-        return response.data.data;
-    });
-
 
     const [requirementComplate, isRender] = useState(false);
 
@@ -53,8 +46,6 @@ const Breifs = () => {
         }
     );
 
-    console.log("branch", branch);
-    console.log("auth", auth);
     useEffect(() => {
         queryClient.invalidateQueries("notification");
     }, [receivedData]);
@@ -63,7 +54,7 @@ const Breifs = () => {
         <Dropdown
             button={
                 <p className="cursor-pointer animate-bounce">
-                    <IoMdInformationCircleOutline className="h-4 w-4 text-gray-600 dark:text-white" />
+                    <IoMdInformationCircleOutline className="h-5 w-5 text-gray-600 dark:text-white" />
                 </p>
             }
             children={

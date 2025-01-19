@@ -67,4 +67,10 @@ public class UserController extends BaseController {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("/change-user-status/{id}")
+    public ResponseEntity<Message<String>> changeUserStatus(@PathVariable UUID id, @RequestParam boolean status) {
+        service.changeUserStatus(id,status);
+        return ResponseEntity.ok().build();
+    }
+
 }

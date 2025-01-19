@@ -1,14 +1,12 @@
 
 import Modal from '../../../../components/modal';
-import React, { useState, useEffect } from 'react';
 
-import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 
 import useAxiosPrivate from "../../../../hooks/useAxiosPrivate";
 import {Button} from "@chakra-ui/button";
 import {toast} from "react-toastify";
 import useAuth from "../../../../hooks/useAuth";
-import uploadFileToFirebase from "../../../firebase/uploadFileToFirebase";
 
 
 

@@ -3,8 +3,7 @@ import nft1 from '../../../../assets/img/nfts/NftBanner1.png';
 import {useMutation, useQueryClient} from 'react-query';
 import useAxiosPrivate from '../../../../hooks/useAxiosPrivate';
 import {toast} from 'react-toastify';
-import {motion, AnimatePresence} from 'framer-motion';
-import {CirclePicker, TwitterPicker} from 'react-color';
+import {motion} from 'framer-motion';
 import useAuth from "../../../../hooks/useAuth";
 import ColorPickerComponent from "../../../../components/ColorPickerComponent";
 
@@ -44,7 +43,6 @@ const Banner1 = () => {
             color: color,
             companyId: auth.companyId
         };
-        console.log(menuData);
         addMenuMutation.mutate(menuData);
     };
 

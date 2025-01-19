@@ -13,8 +13,10 @@ import {
   MdMoney,
   MdGamepad,
   MdDeliveryDining,
-  MdComputer
+  MdComputer,
+  MdOutlineAutorenew
 } from "react-icons/md";
+
 import Company from "components/icons/Company";
 import SignIn from "./views/auth/signIn";
 import Profile from "./views/admin/profile";
@@ -34,6 +36,7 @@ import ForgotPassword from "./views/auth/ForgotPassword";
 import ManageStaff from "./views/admin/ManageStaff";
 import OrderTable from "./views/admin/orderTable";
 import Dashboard from "./views/admin/reports/additionReport";
+import OrderTracking from "./views/admin/orderTracking";
 
 const routes = [
  /* {
@@ -164,7 +167,7 @@ const routes = [
     path: "tables",
     icon: <MdComputer className="h-6 w-6" />,
     component: <Tables />,
-    allowedRoles : ["ADMIN","STAFF"],
+    allowedRoles : ["ADMIN"],
     isShow: true
   },
   {
@@ -177,11 +180,20 @@ const routes = [
     isShow: false
   },
   {
-    name: "siparisler",
+    name: "Masa siparisleri",
     layout: "/admin",
     path: "order",
     icon: <MdDeliveryDining className="h-6 w-6" />,
     component: <Order />,
+    allowedRoles : ["ADMIN","STAFF"],
+    isShow: true
+  },
+  {
+    name: "Beklenen Siparişler",
+    layout: "/admin",
+    path: "order-tracking",
+    icon: <MdOutlineAutorenew className="h-6 w-6" />,
+    component: <OrderTracking />,
     allowedRoles : ["ADMIN","STAFF"],
     isShow: true
   },
@@ -191,7 +203,7 @@ const routes = [
     path: "select-branch",
     icon: <MdDeliveryDining className="h-6 w-6" />,
     component: <SelectBranch />,
-    allowedRoles : ["ADMIN","STAFF"],
+    allowedRoles : ["ADMIN"],
     isShow: false
   },
 

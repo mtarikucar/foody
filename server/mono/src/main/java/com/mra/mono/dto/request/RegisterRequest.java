@@ -35,4 +35,6 @@ public class RegisterRequest {
     private Role role;
 
     private UUID CompanyId;
+
+    private UUID BranchId;
 }

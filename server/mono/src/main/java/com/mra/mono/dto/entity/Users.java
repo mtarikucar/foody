@@ -38,6 +38,8 @@ public class Users implements UserDetails {
     private String phoneNumber;
     private String email;
     private String password;
+    @Column(columnDefinition = "boolean default true")
+    private boolean active ;
 
     @Enumerated(EnumType.STRING)
     private Role role;

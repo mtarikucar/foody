@@ -1,8 +1,5 @@
 import Card from "../../../../components/card";
 import React, {useState} from "react";
-import nft1 from "../../../../assets/img/nfts/NftBanner1.png";
-import {motion} from "framer-motion";
-import ColorPickerComponent from "../../../../components/ColorPickerComponent";
 import useAuth from "../../../../hooks/useAuth";
 import useAxiosPrivate from "../../../../hooks/useAxiosPrivate";
 import {useMutation, useQueryClient} from "react-query";
