@@ -42,29 +42,25 @@ jobs:
       - name: Build & Push Images
         run: |
           # admin
-          docker build -t ${{ secrets.REGISTRY_USERNAME }}/admin:latest ./admin
+          docker build -t ${{ secrets.REGISTRY_USERNAME }}/admin:latest ./root/app/menu_0/admin
           docker push ${{ secrets.REGISTRY_USERNAME }}/admin:latest
 
           # client
-          docker build -t ${{ secrets.REGISTRY_USERNAME }}/client:latest ./client
+          docker build -t ${{ secrets.REGISTRY_USERNAME }}/client:latest ./root/app/menu_0/client
           docker push ${{ secrets.REGISTRY_USERNAME }}/client:latest
 
           # landing
-          docker build -t ${{ secrets.REGISTRY_USERNAME }}/landing:latest ./landing
+          docker build -t ${{ secrets.REGISTRY_USERNAME }}/landing:latest ./root/app/menu_0/landing
           docker push ${{ secrets.REGISTRY_USERNAME }}/landing:latest
 
           # backend
-          docker build -t ${{ secrets.REGISTRY_USERNAME }}/backend:latest ./server/mono
+          docker build -t ${{ secrets.REGISTRY_USERNAME }}/backend:latest ./root/app/menu_0/server/mono
           docker push ${{ secrets.REGISTRY_USERNAME }}/backend:latest
 
           # nginx
-          docker build -t ${{ secrets.REGISTRY_USERNAME }}/nginx:latest ./nginx
+          docker build -t ${{ secrets.REGISTRY_USERNAME }}/nginx:latest ./root/app/menu_0/nginx
           docker push ${{ secrets.REGISTRY_USERNAME }}/nginx:latest
 
-      - name: Check File Content
-        run: |
-          cat docker-compose.yaml
-          cat nginx/nginx.conf
 
       # 6) Sunucuya docker-compose.yaml (ve gerekiyorsa diğer conf dosyaları) kopyala
       - name: Copy docker-compose to server
@@ -75,7 +71,7 @@ jobs:
           password: ${{ secrets.SSH_PASSWORD }}
           port: 22
           source: 'docker-compose.yaml'
-          target: '/app/menu_0'
+          target: './root/app/menu_0'
           debug: true
     
 
@@ -88,7 +84,7 @@ jobs:
           password: ${{ secrets.SSH_PASSWORD }}
           port: 22
           script: |
-            cd /app/menu_0
+            cd ./root/app/menu_0
             # Private repository kullanılıyorsa sunucuda da login yapmak gerekebilir
             # docker login -u "${DOCKER_USER}" -p "${DOCKER_PASS}" docker.io
 
