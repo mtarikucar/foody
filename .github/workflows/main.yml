@@ -42,23 +42,23 @@ jobs:
       - name: Build & Push Images
         run: |
           # admin
-          docker build -t ${{ secrets.REGISTRY_USERNAME }}/admin:latest ./root/app/menu_0/admin
+          docker build -t ${{ secrets.REGISTRY_USERNAME }}/admin:latest ./admin
           docker push ${{ secrets.REGISTRY_USERNAME }}/admin:latest
 
           # client
-          docker build -t ${{ secrets.REGISTRY_USERNAME }}/client:latest ./root/app/menu_0/client
+          docker build -t ${{ secrets.REGISTRY_USERNAME }}/client:latest ./client
           docker push ${{ secrets.REGISTRY_USERNAME }}/client:latest
 
           # landing
-          docker build -t ${{ secrets.REGISTRY_USERNAME }}/landing:latest ./root/app/menu_0/landing
+          docker build -t ${{ secrets.REGISTRY_USERNAME }}/landing:latest ./landing
           docker push ${{ secrets.REGISTRY_USERNAME }}/landing:latest
 
           # backend
-          docker build -t ${{ secrets.REGISTRY_USERNAME }}/backend:latest ./root/app/menu_0/server/mono
+          docker build -t ${{ secrets.REGISTRY_USERNAME }}/backend:latest ./server/mono
           docker push ${{ secrets.REGISTRY_USERNAME }}/backend:latest
 
           # nginx
-          docker build -t ${{ secrets.REGISTRY_USERNAME }}/nginx:latest ./root/app/menu_0/nginx
+          docker build -t ${{ secrets.REGISTRY_USERNAME }}/nginx:latest ./nginx
           docker push ${{ secrets.REGISTRY_USERNAME }}/nginx:latest
 
 
