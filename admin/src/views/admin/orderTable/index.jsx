@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import useAuth from "../../../hooks/useAuth";
-import { useLocation, useParams } from "react-router-dom";
+import {useLocation, useNavigate, useParams} from "react-router-dom";
 import { useQuery, useQueryClient } from "react-query";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import {useWebSocket} from "../../../context/socket/WebSocketContext";
@@ -24,6 +24,7 @@ const OrderTable = () => {
     const location = useLocation();
     const socket = useWebSocket();
     const queryClient = useQueryClient();
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (!socket) return;
@@ -92,9 +93,10 @@ const OrderTable = () => {
                 createTimestamp: new Date().getTime()
             }));
             toast("Ödeme tamamlandı");
-
+            queryClient.invalidateQueries(["orders"]);
             queryClient.invalidateQueries(['additionOrder']);
             queryClient.invalidateQueries(['tableOrder']);
+            navigate('/admin/order');
         } catch (error) {
             console.error('Payment submission failed:', error);
             toast('Payment failed');

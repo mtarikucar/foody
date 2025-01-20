@@ -32,10 +32,9 @@ const Tables = () => {
         return response.data;
     }, {
         onSuccess: () => {
-            // Sorguları tekrar çalıştırarak güncel veriyi getir
             queryClient.invalidateQueries("regions");
             queryClient.invalidateQueries("tables");
-            setSelectedRegion(null); // Seçilen bölgeyi temizle
+            setSelectedRegion(null);
         },
         onError: (error) => {
             console.error('Error deleting region:', error);
@@ -51,7 +50,7 @@ const Tables = () => {
     }, {});
 
     return (
-        <div className="mt-3 bg-white h-dvh flex flex-col justify-center w-full gap-5">
+        <div className="mt-3 bg-white min-h-screen w-full flex flex-col gap-5">
             <NewRegionModal
                 setSelectedRegion={setSelectedRegion}
                 isOpen={newRegionModal}
@@ -63,7 +62,7 @@ const Tables = () => {
                 onClose={() => setAddTableModal(false)}
                 regionId={selectedRegion}
             />
-            <div className="h-dvh w-full rounded-md   flex flex-col items-center gap-2">
+            <div className="flex-grow w-full rounded-md flex flex-col items-center gap-2">
                 <div className="text-2xl font-bold text-navy-700 dark:text-white mt-2">
                     {selectedRegion ?
                         (regions && regions.length > 0 ?
@@ -71,7 +70,7 @@ const Tables = () => {
                             : "Bölge bulunamadı")
                         : "Bütün Masalar"}
                 </div>
-                <div className="grid bg-white grid-cols-1 md:grid-cols-6 w-full h-full">
+                <div className="grid bg-white grid-cols-1 md:grid-cols-6 w-full flex-grow">
                     <div className="col-span-1 flex flex-col items-center p-4 border-r border-gray-200">
                         <button
                             onClick={() => setNewRegionModal(true)}
@@ -118,7 +117,7 @@ const Tables = () => {
                         )}
                     </div>
 
-                    <div className="col-span-5 h-dvh flex flex-col items-center p-4">
+                    <div className="col-span-5 flex flex-col items-center p-4 flex-grow">
                         {selectedRegion && tables ? (
                             <div className="grid grid-cols-2 gap-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 w-full p-2.5">
                                 {groupedTables[selectedRegion]?.map(table => (

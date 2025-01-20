@@ -13,7 +13,6 @@ const useRefreshToken = () => {
                 Authorization: `Bearer ${auth.refreshToken}`
             }
         });
-        console.log(response.data)
         dispatch(loginSuccess({
             user: auth.currentUser,
             role: auth.currentUserRole,

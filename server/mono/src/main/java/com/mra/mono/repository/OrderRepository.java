@@ -16,7 +16,8 @@ public interface OrderRepository extends JpaRepository<Order, UUID> {
 
     @Query("SELECT o FROM Order o WHERE o.branchId = :branchId " +
             "AND (coalesce(:tableId, null) IS NULL OR o.tableId = :tableId) " +
-            "AND (coalesce(:status, null) IS NULL OR o.status = :status)")
+            "AND (coalesce(:status, null) IS NULL OR o.status = :status) " +
+            "ORDER BY o.orderDate DESC")
     List<Order> findAllByBranchIdAndOptionalCriteria(
             @Param("branchId") UUID branchId,
             @Param("tableId") UUID tableId,

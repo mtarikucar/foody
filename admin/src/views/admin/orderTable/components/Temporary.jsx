@@ -90,6 +90,9 @@ const Temporary = ({addedProducts, setAddedProducts, reconnectWebSocket}) => {
                 await reconnectWebSocket(); // Reconnect WebSocket if not connected
             }
 
+            console.log('saveOrder', saveOrder);
+
+
             if (socket) {
                 socket.send(`/app/order/${auth.branchId}/${id}`, {}, JSON.stringify(saveOrder));
                 socket.send(`/app/notification/${auth.currentUser}`, {}, JSON.stringify({
@@ -98,8 +101,10 @@ const Temporary = ({addedProducts, setAddedProducts, reconnectWebSocket}) => {
                     createTimestamp: new Date().getTime()
                 }));
                 setAddedProducts([]);
-                queryClient.invalidateQueries(['additionOrder']);
-                queryClient.invalidateQueries(['tableOrder']);
+                await queryClient.invalidateQueries(['additionOrder']);
+                await queryClient.invalidateQueries(['tableOrder']);
+                await queryClient.invalidateQueries(['orders']);
+                await queryClient.invalidateQueries(['orderTracking']);
             } else {
                 console.error('WebSocket is not available.');
             }

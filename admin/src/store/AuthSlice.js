@@ -19,6 +19,7 @@ const authSlice = createSlice({
       state.currentUser = action.payload.user;
       state.currentUserRole = action.payload.role;
       state.companyId = action.payload.company;
+      state.branchId = action.payload.branch;
       state.companyLogo = action.payload.logo;
       state.accessToken = action.payload.access_token
       state.refreshToken = action.payload.refresh_token

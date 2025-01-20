@@ -21,7 +21,6 @@ export default function NewCompany() {
     const [fileData, setFileData] = useState();
 
     const createCompany = async (companyData) => {
-        console.log({...companyData, userId: auth.currentUser})
         const response = await axiosPrivate.post('/company', {...companyData, userId: auth.currentUser});
         return response.data;
     };
@@ -55,13 +54,10 @@ export default function NewCompany() {
 
     const handleFileDataChange = (newFileData) => {
         setFileData(newFileData);
-        console.log(newFileData)
     };
 
     const handleSubmit = (values) => {
-        console.log(fileData)
         values.logo = fileData || "";
-        console.log(values)
         mutation.mutate(values);
     }
     return (

@@ -107,4 +107,15 @@ public class UserService {
     public List<Users> getUserByCompanyAndBranchId(UUID companyId, UUID branchId) {
         return userRepository.findAllByCompanyIdAndBranchId(companyId,branchId);
     }
+
+    public void changeUserStatus(UUID id, boolean status) {
+        try {
+            Users user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Branch not found with id: " + id));
+            user.setActive(status);
+            userRepository.save(user);
+        } catch (Exception e) {
+            log.error("Error updating User with id: {}", id, e);
+            throw e;
+        }
+    }
 }

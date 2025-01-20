@@ -1,10 +1,10 @@
-import {useEffect, useState} from "react";
-import {useMutation, useQuery, useQueryClient} from "react-query";
-import {IoMdNotificationsOutline} from "react-icons/io";
+import { useEffect, useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { IoMdNotificationsOutline } from "react-icons/io";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import useAuth from "../../hooks/useAuth";
 import Dropdown from "../dropdown";
-import {useWebSocket} from "../../context/socket/WebSocketContext";
+import { useWebSocket } from "../../context/socket/WebSocketContext";
 
 const Notifications = () => {
     const axiosPrivate = useAxiosPrivate();
@@ -25,7 +25,6 @@ const Notifications = () => {
 
             socket.subscribe(topic, handleNotification);
 
-            // Cleanup on unmount or when socket/auth.currentUser changes
             return () => {
                 socket.unsubscribe(topic);
             };
@@ -33,7 +32,7 @@ const Notifications = () => {
     }, [socket, auth.currentUser]);
 
     // Fetch notifications from the server
-    const {data: notification} = useQuery("notification", async () => {
+    const { data: notification } = useQuery("notification", async () => {
         const response = await axiosPrivate.get(
             `/notification?userId=${auth.currentUser}`
         );
@@ -75,7 +74,7 @@ const Notifications = () => {
                             className="flex justify-center items-center h-2 w-2 bg-brand-500 rounded-full absolute top-0 right-0 animate-pulse">
                         </div>
                     )}
-                    <IoMdNotificationsOutline className="h-4 w-4 text-gray-600 dark:text-white" />
+                    <IoMdNotificationsOutline className="h-5 w-5 text-gray-600 dark:text-white" />
                 </p>
             }
             children={
@@ -83,15 +82,15 @@ const Notifications = () => {
                     className="flex w-[280px] flex-col gap-3 rounded-[20px] bg-white p-4 shadow-xl shadow-shadow-500 dark:!bg-navy-700 dark:text-white dark:shadow-none sm:w-[460px] max-h-[50vh] overflow-y-scroll sm:absolute sm:left-0 sm:translate-x-0 translate-x-[-100%]">
                     <div className="flex items-center justify-between">
                         <p className="text-base font-bold text-navy-700 dark:text-white">
-                            Notification
+                            Bildiri
                         </p>
                     </div>
                     {notification?.map((item, index) => (
                         <button key={index}
-                                className="flex p-2 w-full items-center hover:bg-gray-200 ease-in-out duration-300"
+                                className={`flex p-2 w-full items-center hover:bg-gray-200 ease-in-out duration-300 rounded-xl ${item.read ? 'bg-teal-400' : 'bg-orange-200'}` }
                                 onClick={() => mutation.mutate(item?.notificationId)}>
                             <div
-                                className="ml-2 flex h-full w-full flex-col justify-center rounded-lg px-1 text-sm relative">
+                                className={"ml-2 flex h-full w-full flex-col justify-center rounded-lg px-1 text-sm relative "}>
                                 <p className="mb-1 text-left text-base font-bold text-gray-900 dark:text-white">
                                     {item.content}
                                 </p>

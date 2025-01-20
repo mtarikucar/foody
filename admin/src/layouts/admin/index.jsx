@@ -76,11 +76,30 @@ export default function Admin(props) {
                         {...rest}
                     />
 
-                    <div className="pt-5s mx-auto mb-auto h-full min-h-screen p-2 md:pr-2">
+                    <div className="pt-5s mx-auto mb-auto h-full min-h-screen md:pr-2">
                         <Routes>
 
                             {getRoutes(routes)}
+                            {
+                                auth.currentUserRole === "ADMIN" ? (
+                                    <Route
+                                    path="/"
+                                    element={<Navigate to="/admin/profile" replace/>}
+                                    />
+                                        ) : auth.currentUserRole === "STAFF" ? (
+                                    <Route
+                                        path="/"
+                                        element={<Navigate to="/admin/order" replace/>}
+                                    />
+                                ) : (
+                                    <Route
+                                        path="/"
+                                        element={<Navigate to="/auth/select-branch" replace/>}
+                                    />
+                                )
 
+
+                            }
                             <Route
                                 path="/"
                                 element={<Navigate to="/admin/profile" replace/>}
