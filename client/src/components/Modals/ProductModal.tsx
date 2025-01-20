@@ -33,7 +33,7 @@ const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, item }) =>
                             <div className="block w-full rounded-lg shadow-lg bg-white">
                                 <img className="rounded-t-lg w-full" src={item.images[0]} alt={item.name} />
                                 <div className="p-6">
-                                    <div className='flex justify-between items-center mb-4'>
+                                    <div className=''>
                                         <h5 className="text-xl font-medium text-neutral-800">{item.name}</h5>
                                         <p className="text-xl text-neutral-800">₺{item.price}.00</p>
                                     </div>

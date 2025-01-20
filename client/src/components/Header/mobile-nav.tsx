@@ -39,14 +39,14 @@ const MobileNav = ({
           className="relative flex items-center justify-center text-textColor"
           onClick={handleToggleCart}
         >
-          <MdShoppingBasket className="text-4xl cursor-pointer" />
+         {/* <MdShoppingBasket className="text-4xl cursor-pointer" />
           {cartItems && (
             <div className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-cartNumBg flex items-center justify-center">
               <p className="text-sm text-white font-semibold">
                 {cartItems.length}
               </p>
             </div>
-          )}
+          )}*/}
         </motion.div>
         <motion.div
           whileTap={{ scale: 0.9 }}

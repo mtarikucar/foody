@@ -96,7 +96,7 @@ const Header = () => {
               >
                 <motion.div
                   whileHover={{ scale: 1.1 }}
-                  className="group flex items-center justify-center"
+                  className="group flex items-center justify-between"
                 >
                   <img
                     src={user?.photoURL ? user.photoURL : Avatar}
@@ -111,7 +111,7 @@ const Header = () => {
                 </motion.div>
               </div>
             ) : (
-              <LoginAction mobile />
+                null
             )}
           </div>
         )}

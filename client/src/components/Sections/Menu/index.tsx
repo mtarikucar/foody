@@ -82,7 +82,7 @@ const Menu = ({title}: { title?: string }) => {
     return (
         <section className="w-full my-2" id="menu">
             <div className="w-full my-3 flex items-center justify-center">
-                <Title title={title || "Our Hot Dishes"} center/>
+                <Title title={title || "Öne Çıkan Ürünlerimiz"} center/>
             </div>
             <Filters filter={filter} setFilter={setFilter}/>
             <div className="flex justify-between items-center my-2 w-full px-4">

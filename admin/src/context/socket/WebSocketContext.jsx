@@ -3,9 +3,10 @@ import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
 
 const WebSocketContext = createContext(null);
+const BASE_URL =process.env.REACT_APP_BASE_API_URL;
 
 //const BASE_URL ="http://localhost:8080/api/menu/v1";
-const BASE_URL = 'https://api.philofoody.com/api/menu/v1';
+//const BASE_URL = 'https://api.philofoody.com/api/menu/v1';
 
 export const WebSocketProvider = ({ children }) => {
     const [webSocket, setWebSocket] = useState(null);

@@ -34,7 +34,7 @@ function App() {
       <ToastContainer />
       <div className="w-screen h-auto min-h-[100vh] flex flex-col bg-primary">
         {showCart && <Cart />}
-        {showContactForm && <Contact />}
+     {/*   {showContactForm && <Contact />}*/}
         {menuData && <Header />}
         <main
           className={`${
@@ -45,13 +45,13 @@ function App() {
         >
           {/* Routes */}
           <Routes>
-            <Route path="/:id/home" element={<Home />} />
+            <Route path="/:id/home" element={<Home/>} />
            {/* <Route path="/login" element={<Login />} />*/}
             {/*<Route path="/register" element={<Signup />} />*/}
             {/*<Route path="/admin" element={<Admin />} />*/}
             {/*<Route path="/profile" element={<Profile />} />*/}
-            <Route path="/:id/about" element={<About />} />
-            <Route path="/:id" element={<Menu />} />
+            <Route path="/:id/about" element={<About/>} />
+            <Route path="/:id" element={<Menu/>} />
            {/* <Route path="/services" element={<Services />} />*/}
           </Routes>
           {menuData &&<Footer/>}
