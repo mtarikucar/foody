@@ -16,8 +16,13 @@ const signUpSchema = Yup.object().shape({
     lastName: Yup.string().required('Soyad alanı zorunludur'),
     email: Yup.string().email('Geçersiz e-posta adresi').required('E-posta alanı zorunludur'),
     password: Yup.string()
+        .required('Şifre gereklidir')
         .min(8, 'Şifre en az 8 karakter olmalıdır')
-        .required('Şifre alanı zorunludur'),
+        .matches(/[a-zA-Z]/, 'Şifre harf içermelidir')
+        .matches(/[A-Z]/, 'Şifre en az bir büyük harf içermelidir')
+        .matches(/[a-z]/, 'Şifre en az bir küçük harf içermelidir')
+        .matches(/\d/, 'Şifre en az bir rakam içermelidir')
+        .matches(/[\^$*.\[\]{}()?\-"!@#%&/,><':;|_~`]/, 'Şifre en az bir özel karakter içermelidir'),
     phoneNumber: Yup.string().required('Telefon numarası alanı zorunludur'),
 });
 
