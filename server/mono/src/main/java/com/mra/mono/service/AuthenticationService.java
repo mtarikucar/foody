@@ -53,7 +53,7 @@ public class AuthenticationService {
 
         if (existingUser.isPresent()) {
             log.error("Registration failed: Email {} is already in use", request.getEmail());
-            throw new HandledException(200,"Bu e-posta adresiyle zaten bir hesap kayıtlı.");
+            throw new HandledException(400,"Bu e-posta adresiyle zaten bir hesap kayıtlı.");
         }
 
         var user = Users.builder()
@@ -95,6 +95,10 @@ public class AuthenticationService {
             );
             var user = userRepository.findByEmail(request.getEmail())
                     .orElseThrow(() -> new HandledException(404,"Bu Email için kullanıcı bulunamadı: " + request.getEmail()));
+
+            if (!user.isActive()) {
+                throw new HandledException(400,"Kullanıcı aktif değil");
+            }
 
             var jwtToken = jwtService.generateToken(user);
             var refreshToken = jwtService.generateRefreshToken(user);

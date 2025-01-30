@@ -31,6 +31,7 @@ const Navbar = (props) => {
     const handleBranchChange = (branch) => {
         dispatch(setBranch({branchId: branch.branchId, menuId: branch.menuId}));
         setSelectedBranch(branch.branchId);
+        navigate("/");
     };
 
     return (<nav
@@ -68,10 +69,13 @@ const Navbar = (props) => {
                         </span>
                     </div>
                     <Dropdown
-                        button={<FaExchangeAlt
+                        button={
+                        <FaExchangeAlt
                             className="text-indigo-500 hover:text-indigo-700 w-5 h-5 cursor-pointer"/>}
                         children={<div className="w-64 bg-white shadow-md rounded-lg p-2 dark:bg-navy-700">
-                            {branches?.data.map((branch) => (<div
+                            {branches?.data.filter(
+                                (branch) => branch.branchId !== selectedBranch
+                            ).map((branch) => (<div
                                 key={branch.branchId}
                                 onClick={() => handleBranchChange(branch)}
                                 className="flex items-center justify-between p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer"
