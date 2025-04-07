@@ -12,15 +12,12 @@ server:
 # Veritabanı bağlantı bilgileri
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/menuTest
+    url: jdbc:postgresql://localhost:5433/menu
     username: postgres
     password: 123
 
-  # Veritabanı sürücüsü ve platformu
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
-
-    # Hibernate otomatik tablo güncellemelerini aç
     hibernate:
       ddl-auto: update
     open-in-view: false

@@ -14,7 +14,7 @@ server:
 # url: jdbc:postgresql://34.141.28.72:5432/menu
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/menu
+    url: jdbc:postgresql://localhost:5433/menu
     username: postgres
     password: 123
 

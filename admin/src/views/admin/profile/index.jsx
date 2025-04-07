@@ -39,7 +39,6 @@ const ProfileOverview = () => {
     }, [auth?.menuId]);
 
     const handleMenuSelection = (menuId) => {
-        // Simulate updating the auth object with the selected menuId
         auth.menuId = menuId;
         setIsMenuModalOpen(false);
     };

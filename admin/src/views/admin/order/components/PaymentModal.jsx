@@ -5,9 +5,9 @@ import useAxiosPrivate from "../../../../hooks/useAxiosPrivate";
 import useAuth from "../../../../hooks/useAuth";
 import {IoCashOutline, IoCardOutline, IoRemoveCircleOutline, IoAddCircleOutline, IoTrashOutline} from "react-icons/io5";
 import {toast} from "react-toastify";
-import {useWebSocket} from "../../../../context/socket/WebSocketContext";
 import {useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
+import { useSocket } from 'context/socket/useWebSocket';
 
 
 const PaymentModal = ({isOpen, onClose, tableId}) => {
@@ -20,7 +20,7 @@ const PaymentModal = ({isOpen, onClose, tableId}) => {
     const [openIndex, setOpenIndex] = useState(null);
     const [totalCost, setTotalCost] = useState(0);
     const [paymentSuccess, setPaymentSuccess] = useState(false);
-    const socket = useWebSocket();
+    const {socket} = useSocket();
     const user = useSelector((state) => state.auth);
     const navigate = useNavigate();
     // Load orders and calculate total cost

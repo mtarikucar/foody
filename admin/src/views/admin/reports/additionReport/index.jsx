@@ -17,28 +17,28 @@ const Dashboard = () => {
     const { data: additionList = [], isLoading: isAdditionLoading, isError: isAdditionError, error: additionError } = useQuery(
         ['additionReport', companyId],
         async () => {
-            if (companyId) {  // companyId varsa sorgu çalışır
+            if (companyId) {  
                 const response = await axiosPrivate.get(`/report/addition-reports/${companyId}`);
                 return response.data;
             }
-            return [];  // companyId yoksa boş bir liste döner
+            return [];  
         },
         {
-            enabled: !!companyId,  // companyId yoksa sorguyu devre dışı bırakır
+            enabled: !!companyId,  
         }
     );
 
     const { data: reportWidgets, isLoading: isWidgetsLoading, isError: isWidgetsError, error: widgetsError } = useQuery(
-        ['reportWidgets', companyId], // Farklı bir cache key kullanıyoruz
+        ['reportWidgets', companyId], 
         async () => {
-            if (companyId) {  // companyId varsa sorgu çalışır
+            if (companyId) {  
                 const response = await axiosPrivate.get(`/report/widgets/${companyId}`);
                 return response.data;
             }
-            return {};  // companyId yoksa boş bir nesne döner
+            return {};  
         },
         {
-            enabled: !!companyId,  // companyId yoksa sorguyu devre dışı bırakır
+            enabled: !!companyId,  
         }
     );
 

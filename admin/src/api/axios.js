@@ -1,8 +1,6 @@
 import axios from 'axios';
 
 const BASE_URL = 'http://localhost:8080/api/menu/v1';
-//const BASE_URL = 'https://orca-app-5lor4.ondigitalocean.app/api';
-//get bseurl from env using vite
 //const BASE_URL = "https://api.philofoody.com/api/menu/v1";
 
 export default axios.create({

@@ -2,13 +2,14 @@ import React, {useState} from 'react';
 import Switch from "../../../../components/switch";
 import useAuth from "../../../../hooks/useAuth";
 import {useParams} from "react-router-dom";
-import {useWebSocket} from "../../../../context/socket/WebSocketContext";
 import {useQueryClient} from "react-query";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import { useSocket } from 'context/socket/useWebSocket';
+import { toast } from 'react-toastify';
 
 
 const Temporary = ({addedProducts, setAddedProducts, reconnectWebSocket}) => {
-    const socket = useWebSocket();
+    const {socket} = useSocket();
     const auth = useAuth();
     const {id} = useParams();
     const [isTotal, setIsTotal] = useState(true);
@@ -90,7 +91,8 @@ const Temporary = ({addedProducts, setAddedProducts, reconnectWebSocket}) => {
                 await reconnectWebSocket(); // Reconnect WebSocket if not connected
             }
 
-            console.log('saveOrder', saveOrder);
+
+            console.log('saveOrder', socket);
 
 
             if (socket) {
@@ -106,10 +108,10 @@ const Temporary = ({addedProducts, setAddedProducts, reconnectWebSocket}) => {
                 await queryClient.invalidateQueries(['orders']);
                 await queryClient.invalidateQueries(['orderTracking']);
             } else {
-                console.error('WebSocket is not available.');
+                toast.error('WebSocket bağlantısı sağlanamadı. Lütfen sayfayı yenileyin.');
             }
         } catch (e) {
-            console.log('Error during order submission:', e);
+            toast.error('Sipariş gönderilirken bir hata oluştu.');            
         }
     };
 

@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react';
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import useAuth from "../../../hooks/useAuth";
 import { useQuery, useQueryClient } from "react-query";
-import { useWebSocket } from "../../../context/socket/WebSocketContext";
 import { toast } from "react-toastify";
 import { NavLink } from "react-router-dom";
 import tableImage from "../../../assets/img/table/table.png";
 import Spinner from "../../../components/Spinner/Spinner";
+import { useSocket } from 'context/socket/useWebSocket';
 
 const Order = () => {
     const axiosPrivate = useAxiosPrivate();
@@ -14,7 +14,7 @@ const Order = () => {
     const queryClient = useQueryClient();
     const [selectedRegion, setSelectedRegion] = useState(null);
     const [receivedData, setReceivedData] = useState([]);
-    const socket = useWebSocket();
+    const {socket} = useSocket();
 
     useEffect(() => {
         if (socket) {

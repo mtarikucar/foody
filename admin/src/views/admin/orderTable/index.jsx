@@ -3,7 +3,6 @@ import useAuth from "../../../hooks/useAuth";
 import {useLocation, useNavigate, useParams} from "react-router-dom";
 import { useQuery, useQueryClient } from "react-query";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
-import {useWebSocket} from "../../../context/socket/WebSocketContext";
 import Temporary from "./components/Temporary";
 import Addition from "./components/Addition";
 import PaymentModal from "../order/components/PaymentModal";
@@ -11,6 +10,7 @@ import QuickPaymentModal from "../order/components/QuickPaymentModal";
 import Spinner from "../../../components/Spinner/Spinner";
 import {toast} from "react-toastify";
 import { IoMdAdd,IoIosRemove } from "react-icons/io";
+import { useSocket } from 'context/socket/useWebSocket';
 
 const OrderTable = () => {
     const [addedProducts, setAddedProducts] = useState([]);
@@ -22,7 +22,7 @@ const OrderTable = () => {
     const auth = useAuth();
     const { id } = useParams();
     const location = useLocation();
-    const socket = useWebSocket();
+    const {socket} = useSocket();
     const queryClient = useQueryClient();
     const navigate = useNavigate();
 

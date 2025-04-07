@@ -4,7 +4,7 @@ import { IoMdNotificationsOutline } from "react-icons/io";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import useAuth from "../../hooks/useAuth";
 import Dropdown from "../dropdown";
-import { useWebSocket } from "../../context/socket/WebSocketContext";
+import { useSocket } from "context/socket/useWebSocket";
 
 const Notifications = () => {
     const axiosPrivate = useAxiosPrivate();
@@ -12,7 +12,7 @@ const Notifications = () => {
     const [isUnreadExist, setIsUnreadExist] = useState(true);
     const [receivedData, setReceivedData] = useState([]);
     const queryClient = useQueryClient();
-    const socket = useWebSocket();
+    const {socket} = useSocket();
 
     // Subscribe to socket notifications
     useEffect(() => {

@@ -1,50 +1,47 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import useAuth from "../../../hooks/useAuth";
-import { useLocation, useParams } from "react-router-dom";
 import { useQuery, useQueryClient } from "react-query";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
-import { useWebSocket } from "../../../context/socket/WebSocketContext";
 import Spinner from "../../../components/Spinner/Spinner";
 import { FaEllipsisH } from 'react-icons/fa';
+import { useSocket } from 'context/socket/useWebSocket';
 
 const OrderTracking = () => {
     const axiosPrivate = useAxiosPrivate();
     const auth = useAuth();
-    const { id } = useParams();
-    const location = useLocation();
-    const socket = useWebSocket();
+    const {socket} = useSocket();
     const queryClient = useQueryClient();
     const [expandedOrders, setExpandedOrders] = useState({});
 
-    useEffect(() => {
-        if (!socket || !auth.currentUser) return;
+    // useEffect(() => {
+    //     if (!socket || !auth.currentUser) return;
 
-        const subscribeToNotification = async () => {
-            if (socket.connected) {
-                socket.subscribe(`/topic/notification/${auth.currentUser}`, (message) => {
-                    try {
-                        const body = message.body ? JSON.parse(message.body) : null;
-                        if (body) {
-                            console.log('Notification received:', body);
-                            queryClient.invalidateQueries(['orderTracking']);
-                        }
-                    } catch (error) {
-                        console.error('Error parsing notification:', error);
-                    }
-                });
-            } else {
-                await reconnectWebSocket();
-            }
-        };
+    //     const subscribeToNotification = async () => {
+    //         if (socket.connected) {
+    //             socket.subscribe(`/topic/notification/${auth.currentUser}`, (message) => {
+    //                 try {
+    //                     const body = message.body ? JSON.parse(message.body) : null;
+    //                     if (body) {
+    //                         console.log('Notification received:', body);
+    //                         queryClient.invalidateQueries(['orderTracking']);
+    //                     }
+    //                 } catch (error) {
+    //                     console.error('Error parsing notification:', error);
+    //                 }
+    //             });
+    //         } else {
+    //             await reconnectWebSocket();
+    //         }
+    //     };
 
-        subscribeToNotification();
+    //     subscribeToNotification();
 
-        return () => {
-            if (socket.connected) {
-                socket.unsubscribe(`/topic/notification/${auth.currentUser}`);
-            }
-        };
-    }, [socket, auth.currentUser, queryClient]);
+    //     return () => {
+    //         if (socket.connected) {
+    //             socket.unsubscribe(`/topic/notification/${auth.currentUser}`);
+    //         }
+    //     };
+    // }, [socket, auth.currentUser, queryClient]);
 
 
     const { data: orderTracking, isLoading: isOrderLoading } = useQuery(['orderTracking'], async () => {

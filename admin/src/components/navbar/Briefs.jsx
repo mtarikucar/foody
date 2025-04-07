@@ -1,21 +1,19 @@
 // Notifications.js
 import React, {useEffect,useState} from "react";
 import { useQuery, useQueryClient } from "react-query";
-import {IoMdInformation, IoMdInformationCircleOutline, IoMdNotificationsOutline} from "react-icons/io";
-import { BsArrowBarUp } from "react-icons/bs";
+import { IoMdInformationCircleOutline} from "react-icons/io";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import useAuth from "../../hooks/useAuth";
 import Dropdown from "../dropdown";
-import {useWebSocket} from "../../context/socket/WebSocketContext";
-import Package from "../../views/admin/profile/components/package";
 import Requirements from "../../views/admin/branch/components/Upload";
+import { useSocket } from "context/socket/useWebSocket";
 
 const Breifs = () => {
     const axiosPrivate = useAxiosPrivate();
     const auth = useAuth();
     const queryClient = useQueryClient();
     const [receivedData, setReceivedData] = useState([]);
-    const socket = useWebSocket();
+    const {socket} = useSocket();
 
     useEffect(() => {
         if (socket) {
@@ -35,14 +33,14 @@ const Breifs = () => {
 
     const [requirementComplate, isRender] = useState(false);
 
-    const { data: branch, isLoading, error } = useQuery(
+    const { data: branch} = useQuery(
         ['branch'],
         async () => {
             const response = await axiosPrivate.get(`/branch/${auth.branchId}`);
             return response.data.data;
         },
         {
-            enabled: !!auth.branchId, // Query runs only if auth.branchId exists
+            enabled: !!auth.branchId,
         }
     );
 

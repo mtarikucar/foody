@@ -2,13 +2,13 @@ import React from "react";
 import {Routes, Route, Navigate, useLocation} from "react-router-dom";
 import Navbar from "../../components/navbar";
 import Sidebar from "../../components/sidebar";
-import Footer from "../../components/footer/Footer";
 import routes from "../../routes.js";
 import ScrollToTop from "../../hooks/ScrollToTop";
 
 
 import Joyride from 'react-joyride'
 import useAuth from "../../hooks/useAuth";
+import { SocketProvider } from "context/socket/useWebSocket";
 
 export default function Admin(props) {
     const {...rest} = props;
@@ -58,9 +58,11 @@ export default function Admin(props) {
 
 
     document.documentElement.dir = "ltr";
-    return (<div className="flex h-dvhw-full bg-white/10 dark:!bg-navy-900">
-        <ScrollToTop/>
-        <Joyride steps={steps} continuous={true}
+    return (
+        <SocketProvider>
+            <div className="flex h-dvhw-full bg-white/10 dark:!bg-navy-900">
+                <ScrollToTop/>
+                <Joyride steps={steps} continuous={true}
                  locale={{back: 'Geri', close: 'Kapat', last: 'Bitir', next: 'Sonraki', open: 'Başlat', skip: 'Geç'}}/>
         <Sidebar open={open} onClose={() => setOpen(false)}/>
         {/* Navbar & Main Content */}
@@ -110,5 +112,7 @@ export default function Admin(props) {
 
             </main>
         </div>
-    </div>);
+    </div>
+    </SocketProvider>
+    );
 }

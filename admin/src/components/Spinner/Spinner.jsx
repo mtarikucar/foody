@@ -1,4 +1,4 @@
-import { useState, CSSProperties } from "react";
+import {  CSSProperties } from "react";
 import ClipLoader from "react-spinners/ClipLoader";
 
 // Updated CSS to center the spinner both vertically and horizontally

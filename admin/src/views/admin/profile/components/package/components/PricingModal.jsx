@@ -2,7 +2,7 @@ import React from 'react';
 import {AnimatePresence, motion} from "framer-motion";
 import PricingCard from "./PricingCard";
 import Modal from "../../../../../../components/modal";
-import {useMutation, useQuery} from "react-query";
+import {useQuery} from "react-query";
 import useAxiosPrivate from "../../../../../../hooks/useAxiosPrivate";
 
 
